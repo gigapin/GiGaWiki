@@ -1,0 +1,97 @@
+.fade-out {
+    opacity: 0;
+    animation: fadeOut ease 5s;
+    -webkit-animation: fadeOut ease 5s;
+    -moz-animation: fadeOut ease 5s;
+    -o-animation: fadeOut ease 5s;
+}
+
+@keyframes fadeOut {
+     0% {
+         opacity:1;
+     }
+     100% {
+         opacity:0;
+     }
+ }
+
+@-moz-keyframes fadeOut {
+    0% {
+        opacity:1;
+    }
+    100% {
+        opacity:0;
+    }
+}
+
+@-webkit-keyframes fadeOut {
+    0% {
+        opacity:1;
+    }
+    100% {
+        opacity:0;
+    }
+}
+
+@-o-keyframes fadeOut {
+    0% {
+        opacity:1;
+    }
+    100% {
+        opacity:0;
+    }
+}
+
+@-ms-keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+#main {
+    background-color: #edf2f7;
+    color: #2D3A4A;
+}
+
+#main-box {
+    max-width: 1201px;
+}
+
+.icons {
+    font-size: 24px;
+    color: #1a202c;
+}
+
+.mini-icons {
+    font-size: 16px;
+    color: #1a202c;
+}
+
+.maxi-icons {
+    font-size: 64px;
+}
+
+a {
+    color: #1a202c;
+    text-decoration: none;
+}
+
+a:hover {
+    color: black;
+}
+
+#description-area {
+    max-width: 1201px;
+}
+
+.note-editor.note-frame {
+    margin-top: 1rem;
+}
+
+.note-editing-area {
+    min-height: 440px;
+}
+
