@@ -3,25 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\Activity;
-use App\Models\View;
+use App\Services\ActivityService;
+use App\Services\ViewService;
 
 class GigawikiController extends Controller
 {
     /**
-     * @return Activity
+     * @return ActivityService
      */
-    public function getActivity(): Activity
+    public function getActivity()
     {
-        return new Activity();
+        return new ActivityService();
     }
 
     /**
-     * @return View
+     * @return ViewService
      */
-    public function getView(): View
+    public function getView()
     {
-        return new View();
+        return new ViewService();
     }
 
 

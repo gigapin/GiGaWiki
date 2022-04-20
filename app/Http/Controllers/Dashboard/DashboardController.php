@@ -20,7 +20,7 @@ class DashboardController extends GigawikiController
      *
      * @return Application|Factory|View
      */
-    public function index(): View|Factory|Application
+    public function index()
     {
         $getUrl = array();
         $visited = $this->getView()->showAllViews();
