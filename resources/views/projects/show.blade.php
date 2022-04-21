@@ -43,8 +43,10 @@
                 {{ $sections->links() }}
             </div>
         </div>
-
-        @include('partials.comments')
+        
+        @if($displayComments === 'false')
+            @include('partials.comments')
+        @endif
 
     </x-create-form>
 

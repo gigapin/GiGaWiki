@@ -1,3 +1,4 @@
+
 <!-- COMMENTS -->
 <div class="bg-white shadow-2xl rounded p-4 mt-8 border-t-2 border-green-600 md:w-8/12 md:mx-auto lg:py-6 2xl:py-8 2xl:mt-28">
     <div class="flex justify-between">
@@ -12,7 +13,7 @@
     </div>
 
     <div id="form-comment" class="mt-6 w-11/12 mx-auto hidden">
-        <form action="{{ url('projects/' . $slug->slug . '/comments/store') }}" method="POST">
+        <form action="{{ route('comments.store', [$url, $slug->slug]) }}" method="POST">
             @csrf
             <textarea name="body" id="" class="w-full h-52 text-xs lg:text-sm border-gray-300"></textarea>
             <div class="grid justify-items-end">
@@ -58,7 +59,7 @@
 
                             <!-- DELETE -->
                             <div>
-                                <form action="{{ url('projects/' . $slug->slug . '/comments/delete/' . $comment->id) }}" method="POST">
+                                <form action="{{ route('comments.destroy', [$url, $slug->slug, $comment->id]) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="text-gray-400 hover:text-gray-700">
@@ -76,7 +77,7 @@
 
                 <!-- Edit Comment -->
                 <div class="form-comment mx-auto hidden" id="edit-comment-{{ $comment->id }}">
-                    <form action="{{ url('projects/' . $slug->slug . '/comments/' . $comment->id . '/update') }}" method="POST">
+                    <form action="{{ route('comments.update', [$url, $slug->slug, $comment->id]) }}" method="POST">
                         @csrf
                         @method('PUT')
                         <textarea name="body" id="" class="w-full h-50 border-gray-300 text-xs lg:text-sm">{{ $comment->body }}</textarea>
@@ -115,7 +116,7 @@
             <!-- Reply Comment -->
             <div id="form-reply-comment-{{ $comment->id }}" class="mt-6 w-11/12 mx-auto hidden lg:ml-12">
                 <p class="bg-green-200 text-sm p-1 text-gray-500">In reply to comment by {{ $user->name }}</p>
-                <form action="{{ url('projects/' . $slug->slug . '/comments/' . $comment->id . '/reply') }}" method="POST">
+                <form action="{{ route('comments.reply', [$url, $slug->slug, $comment->id]) }}" method="POST">
                     @csrf
                     <textarea name="body" id="" class="w-full h-50 border-gray-300 text-xs lg:text-sm"></textarea>
                     <div class="grid justify-items-end">

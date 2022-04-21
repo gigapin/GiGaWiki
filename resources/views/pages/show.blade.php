@@ -63,14 +63,16 @@
             </div>
         @endif
 
-        @include('partials.comments')
+        @if ($displayComments === 'false')
+            @include('partials.comments')
+        @endif
 
     </div>
 
     <x-buttons :link="'pages'" :edit="'true'" :delete="'true'" id="{{ $slug->slug }}" new="{{ route('pages.create', [$section->project->slug, $section->slug]) }}" :page="'New'">
 
         <div class="p-2 ml-2 mr-1 w-1/3 lg:mx-auto lg:p-2 lg:w-10/12 lg:ml-0 lg:mb-2 2xl:w-8/12 2xl:mx-auto">
-            <a href="{{ route('export.pdf', [$project->slug, $section->slug, $slug->slug]) }}" class="text-xs md:text-sm xl:text-base h-12">
+            <a href="{{ route('export.pdf', $slug->slug) }}" class="text-xs md:text-sm xl:text-base h-12">
                 <i class="bi bi-plus-square icons"></i>
                 Export PDF
             </a>

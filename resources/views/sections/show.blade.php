@@ -29,8 +29,7 @@
                 {{ $pages->links() }}
             </div>
         </div>
-
-        @include('partials.comments')
+        
     </x-create-form>
 
     <x-buttons :link="'sections'" id="{{ $slug->slug }}" :page="'New Page'" new="{{ route('pages.create', [$slug->project->slug, $slug->slug]) }}" :delete="'true'" :edit="'true'"/>

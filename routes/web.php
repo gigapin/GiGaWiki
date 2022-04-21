@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Dashboard\AccountMailController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\ProjectController;
@@ -14,6 +15,7 @@ use App\Http\Controllers\Dashboard\PDFController;
 use App\Http\Controllers\Dashboard\ImageController;
 use App\Http\Controllers\Dashboard\SettingController;
 use App\Http\Controllers\Dashboard\UserController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -64,10 +66,10 @@ Route::middleware(['auth'])->group(function() {
     Route::delete('pages/{slug}', [PageController::class, 'destroy'])->name('pages.delete');
     Route::get('pages/{slug}/destroy', [PageController::class, 'delete'])->name('pages.destroy');
 
-    Route::post('{model}/{slug}/comments/store', [CommentController::class, 'store']);
-    Route::post('{model}/{slug}/comments/{id}/reply', [CommentController::class, 'reply']);
-    Route::put('{model}/{slug}/comments/{comment}/update', [CommentController::class, 'update']);
-    Route::delete('{model}/{slug}/comments/delete/{id}', [CommentController::class, 'destroy']);
+    Route::post('{model}/{slug}/comments', [CommentController::class, 'store'])->name('comments.store');
+    Route::post('{model}/{slug}/comments/{id}', [CommentController::class, 'reply'])->name('comments.reply');
+    Route::put('{model}/{slug}/comments/{id}', [CommentController::class, 'update'])->name('comments.update');
+    Route::delete('{model}/{slug}/comments/{id}', [CommentController::class, 'destroy'])->name('comments.destroy');
 
     Route::get('tags', [TagController::class, 'index'])->name('tags.index');
     Route::get('tags/{name}', [TagController::class, 'show'])->name('tags.show');
@@ -82,7 +84,7 @@ Route::middleware(['auth'])->group(function() {
     Route::post('favorites', [FavoriteController::class, 'store'])->name('favorites.store');
     Route::delete('favorites/{id}', [FavoriteController::class, 'delete'])->name('favorites.delete');
 
-    Route::get('{project}/{section}/{slug}/export/pdf', [PDFController::class, 'generatePdf'])->name('export.pdf');
+    Route::get('{slug}/export/pdf', [PDFController::class, 'generatePdf'])->name('export.pdf');
 
     Route::post('images', [ImageController::class, 'store'])->name('images.store');
     Route::get('images', [ImageController::class, 'index'])->name('images.index');
@@ -108,6 +110,8 @@ Route::middleware(['auth'])->group(function() {
 
     Route::resource('users', UserController::class);
     Route::get('users/delete/{id}', [UserController::class, 'delete'])->name('users.delete');
+
+    Route::get('send', [AccountMailController::class, 'sendMail']);
 
 });
 

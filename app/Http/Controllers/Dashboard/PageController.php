@@ -85,7 +85,8 @@ class PageController extends GigawikiController
             'user' => User::loggedUser(),
             'revision' => Revision::showRevisionButton($slug),
             'favorite' => Favorite::where('page_id', $page->getPage($slug)->id)->where('user_id', Auth::id())->where('page_type', 'pages')->first(),
-            'url' => 'pages'
+            'url' => 'pages',
+            'displayComments' => $this->displayComments()
         ]);
     }
 

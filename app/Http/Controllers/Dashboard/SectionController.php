@@ -71,6 +71,7 @@ class SectionController extends GigawikiController
             'url' => 'subjects',
             'name' => 'name',
             'rows' => Section::all(),
+            'displayComments' => $this->displayComments()
         ]);
     }
 

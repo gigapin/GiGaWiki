@@ -220,13 +220,7 @@ class SettingController extends Controller
             if (Storage::exists($image->path)) {
                 Storage::delete($image->path);
                 $image->delete();
-            } // else {
-            //     $path = storage_path($image->path);
-            //     dd($path);
-            //     if (file_exists($path)) {
-            //         unlink($path);
-            //     }
-            // }
+            } 
         }
 
         return redirect()->route('settings.maintenance');

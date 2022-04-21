@@ -106,7 +106,8 @@ class ProjectController extends GigawikiController
             'featured' => $this->getImageFeatured(Project::getProject($slug)->id, 'Project'),
             'name' => 'name',
             'url' => 'projects',
-            'tags' => Tag::where('page_type', 'project')->where('page_id', Project::getProject($slug)->id)->get()
+            'tags' => Tag::where('page_type', 'project')->where('page_id', Project::getProject($slug)->id)->get(),
+            'displayComments' => $this->displayComments()
         ]);
     }
 

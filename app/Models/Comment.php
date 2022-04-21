@@ -10,7 +10,13 @@ class Comment extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['page_id', 'page_type', 'body', 'parent_id'];
+    protected $fillable = [
+        'user_id',
+        'page_id', 
+        'page_type', 
+        'body', 
+        'parent_id'
+    ];
 
     public static function hasParent()
     {
@@ -28,6 +34,7 @@ class Comment extends Model
             ->where('parent_id', '=', null)
             ->orderBy('updated_at', 'desc')
             ->paginate(env('COMMENT_PAGE'));
+        
     }
 
     public static function getParentComments(object $object)

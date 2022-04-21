@@ -34,12 +34,12 @@
                     </x-setting-box>
                     @endif
                     
-                    @if($setting->key === 'enable-registration')
+                    {{-- @if($setting->key === 'enable-registration')
                     <x-setting-box :title="'Enable Registration'" :type="'checkbox'" :name="'setting[enable-registration]'" value="{{ $setting->value }}">
                         When registration is enabled user will be able to sign themselves up as an application user. 
                         Upon registration they are given a single, default user role.
                     </x-setting-box>
-                    @endif
+                    @endif --}}
 
                     @if($setting->key === 'email-confirmation')
                     <x-setting-box :title="'Email Confirmation'" :type="'checkbox'" :name="'setting[email-confirmation]'" value="{{ $setting->value }}">
@@ -76,10 +76,10 @@
                     Disables comments across all pages in the application. Existing comments are not shown.
                 </x-setting-box>
 
-                <x-setting-box :title="'Enable Registration'" :type="'checkbox'" :name="'setting[enable-registration]'">
+                {{-- <x-setting-box :title="'Enable Registration'" :type="'checkbox'" :name="'setting[enable-registration]'">
                     When registration is enabled user will be able to sign themselves up as an application user. 
                     Upon registration they are given a single, default user role.
-                </x-setting-box>
+                </x-setting-box> --}}
 
                 <x-setting-box :title="'Email Confirmation'" :type="'checkbox'" :name="'setting[email-confirmation]'">
                     If domain restriction is used then email confirmation will be required and this option will be ignored.

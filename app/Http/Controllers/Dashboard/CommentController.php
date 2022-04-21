@@ -20,8 +20,8 @@ class CommentController extends GigawikiController
     {
         $class = $this->getClassName($model);
         $namespace = "App\Models\\$class";
-
-        return $namespace::where('slug', '=', $slug)->first();
+        
+        return $namespace::where('slug', $slug)->first();
     }
 
     /**
@@ -109,7 +109,8 @@ class CommentController extends GigawikiController
      */
     public function getDataForm($request, $item, $model, $id = null)
     {
-        $comment = $request->all();
+        dd($item);
+        $comment['body'] = $request->body;
         $comment['user_id'] = Auth::id();
         $comment['page_id'] = $item->id;
         $comment['page_type'] = $this->getClassName($model);
