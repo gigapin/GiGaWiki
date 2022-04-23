@@ -61,11 +61,12 @@
             </div>
 
             <div class="py-6 text-right">
-                <x-button type="submit">Update User</x-button>
+                <x-link-button link="{{ route('users.delete', $user->id) }}" :label="'Delete User'" />
+                <x-button>Update User</x-button>
             </div>
             
         </form>
-
+       
     </x-create-form>
 
 </x-app-layout>

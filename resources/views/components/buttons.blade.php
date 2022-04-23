@@ -12,7 +12,7 @@
 
     {{-- Edit Button --}}
     @if($edit === true)
-        <div class="p-2 mx-1 @if($delete !== true) mx-2 @endif w-1/3 lg:mx-auto lg:p-2 lg:mb-2 lg:w-10/12 lg:ml-0 2xl:w-8/12 2xl:mx-auto">
+        <div class="p-2 @if($delete !== true) mx-2 @else mx-1 @endif w-1/3 lg:mx-auto lg:p-2 lg:mb-2 lg:w-10/12 lg:ml-0 2xl:w-8/12 2xl:mx-auto">
             <a href="{{ route($link . '.edit', $id) }}" class="text-xs md:text-sm xl:text-base">
                 <i class="bi bi-pencil-square icons"></i>
                 Edit
@@ -22,7 +22,7 @@
 
     {{-- Delete Button --}}
     @if($delete === true)
-        <div class="p-2 ml-1 mr-2 w-1/3 @if($edit !== true) ml-2 @endif lg:mx-auto lg:p-2 lg:mb-2 lg:w-10/12 lg:ml-0 2xl:w-8/12 2xl:mx-auto">
+        <div class="p-2 mr-2 w-1/3 @if($edit !== true) ml-2 @else ml-1 @endif lg:mx-auto lg:p-2 lg:mb-2 lg:w-10/12 lg:ml-0 2xl:w-8/12 2xl:mx-auto">
             <a href="{{ route($link . '.destroy', $id) }}" class="text-xs md:text-sm xl:text-base">
                 <i class="bi bi-x-square icons"></i>
                 Delete

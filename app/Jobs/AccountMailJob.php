@@ -17,6 +17,7 @@ class AccountMailJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public $user;
+    
     /**
      * Create a new job instance.
      *

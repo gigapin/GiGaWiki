@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Events\Profiled;
+use App\Events\UserAdded;
 use App\Http\Controllers\Controller;
 use App\Models\Activity;
 use App\Models\Subject;
@@ -9,9 +11,11 @@ use App\Models\Project;
 use App\Models\Section;
 use App\Models\Page;
 use App\Models\RoleUser;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
@@ -48,6 +52,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
@@ -59,11 +64,26 @@ class UserController extends Controller
         $role->user_id = $user->id;
         $role->role_id = $request->roles[0];
         $role->save();
+        
+        if ($request->invite === 'on') {
+            event(new Profiled($user));
+        }
 
+        // If email confirmation is required send an email to new user
+        $setting = Setting::where('key', 'email-confirmation')->first();
+        if ($setting->value === 'true') {
+            event(new UserAdded($user));
+        }
+        
         return redirect()
             ->route('settings.users')
             ->with('success', 'User created successfully');
-        
+    }
+
+    public function emailConfirmation(User $user, int $id)
+    {
+        $account = $user->find($id);
+        dd($account);
     }
 
     /**

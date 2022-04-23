@@ -55,7 +55,7 @@
                     You can choose to send this user an invitation email. 
                 </p>
                 <div class="py-1">
-                    <input type="checkbox" name="" class="mr-2">Send user invite email
+                    <input type="checkbox" name="invite" class="mr-2">Send user invite email
                 </div>
             </div>
 
