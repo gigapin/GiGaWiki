@@ -37,15 +37,15 @@ require __DIR__.'/auth.php';
 Route::get('users/email-confirmation/{id}', [UserController::class, 'emailConfirmation'])->name('email.confirmation');
 
 /** VERIFICATION EMAIL */
-Route::get('/email/verify', function () {
-    return view('auth.verify-email');
-})->middleware('auth')->name('verification.notice');
+// Route::get('/email/verify', function () {
+//     return view('auth.verify-email');
+// })->middleware('auth')->name('verification.notice');
 
-Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-    $request->fulfill();
+// Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+//     $request->fulfill();
  
-    return redirect('/dashboard');
-})->middleware(['auth', 'signed'])->name('verification.verify');
+//     return redirect('/dashboard');
+// })->middleware(['auth', 'signed'])->name('verification.verify');
 
 
 /** ROUTES AUTH MIDDLEWARE GROUP */
