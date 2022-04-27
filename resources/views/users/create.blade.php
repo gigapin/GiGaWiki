@@ -17,17 +17,15 @@
                     Set a display name and an email address for this user. The email address will be used for logging into the application.
                 </p>
                 <div class="md:flex md:justify-between">
-                    <div class="w-full md:w-1/3 pr-6">
+                    <div class="w-full md:w-1/2 pr-6">
                         <p>Name</p>
                         <x-input type="text" name="name" />
+                        @error('name') <p class="text-base text-red-800">{{ $message }}</p> @enderror
                     </div>
-                    <div class="w-full md:w-1/3 pr-6">
+                    <div class="w-full md:w-1/2">
                         <p>Email</p>
                         <x-input type="text" name="email"/>
-                    </div>
-                    <div class="w-full md:w-1/3">
-                        <p>Password</p>
-                        <x-input type="password" name="password"/>
+                        @error('email') <p class="text-base text-red-800">{{ $message }}</p> @enderror
                     </div>
                 </div>
             </div>
@@ -47,15 +45,30 @@
                 <div class="py-1">
                     <input type="radio" name="roles[]" value="3" class="mr-2">Guest
                 </div>
+                @error('roles') <p class="text-base text-red-800">{{ $message }}</p> @enderror
             </div>
 
             <div class="py-6 border-b border-gray-300">
-                <h3>Send User Invite</h3>
+                <h3>User Password</h3>
                 <p>
-                    You can choose to send this user an invitation email. 
+                    You can choose to send this user an invitation email which allows them to set their own password otherwise you can set their password yourself.
                 </p>
                 <div class="py-1">
-                    <input type="checkbox" name="invite" class="mr-2">Send user invite email
+                    <input type="checkbox" name="invite" class="mr-2" id="checkbox-user-invititation">Send user invite email
+                </div>
+                <div id="create-user-password">
+                    <div class="md:flex md:justify-between">
+                        <div class="w-full md:w-1/2 pr-6">
+                            <p>Password</p>
+                            <x-input type="password" name="password" />
+                            @error('password') <p class="text-base text-red-800">{{ $message }}</p> @enderror
+                        </div>
+                        <div class="w-full md:w-1/2">
+                            <p>Confirm Password</p>
+                            <x-input type="password" name="password_confirmation"/>
+                            @error('password_confirmation') <p class="text-base text-red-800">{{ $message }}</p> @enderror
+                        </div>
+                    </div>
                 </div>
             </div>
 

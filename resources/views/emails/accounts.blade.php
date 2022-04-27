@@ -1,14 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
+@component('mail::message')
+# Invite to partecipe in {{ config('app.name') }}
 
-    <h1>Welcome {{ $name }}</h1>
-    <h4>Please confirm your email: {{ $email }}</h4>
-</body>
-</html>
+Hi {{ $name }},   
+You have been invited to partecipate in GiGaWiki web application.  
+Click on button below to agree.
+
+@component('mail::button', ['url' => $url])
+Agree to invite
+@endcomponent
+
+Thanks,<br>
+{{ config('app.name') }}
+@endcomponent

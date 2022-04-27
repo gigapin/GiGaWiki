@@ -4,6 +4,7 @@ namespace App\Listeners;
 
 use App\Events\Profiled;
 use App\Mail\AccountMail;
+use App\Notifications\UserInvitation;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Mail;
@@ -28,6 +29,7 @@ class SendEmailInvite
      */
     public function handle(Profiled $event)
     {
-        Mail::to($event->user->email)->send(new AccountMail($event->user));
+        //Mail::to($event->user->email)->send(new AccountMail($event->user));
+        $event->user->notify(new UserInvitation());
     }
 }

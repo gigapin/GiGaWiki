@@ -7,6 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class EmailConfirmation extends Mailable
 {
@@ -31,7 +32,6 @@ class EmailConfirmation extends Mailable
      */
     public function build()
     {
-        
         return $this->markdown('emails.users.email-confirmation', [
             'url' => route('verification.notice'),
             'user' => $this->user,

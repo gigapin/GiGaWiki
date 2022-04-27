@@ -16,6 +16,20 @@ function comments() {
     }
 }
 
+function hiddenUserPassword()
+{
+    const pass = document.getElementById('create-user-password');
+    const check = document.getElementById('checkbox-user-invititation');
+    pass.style.display = "block";
+    check.addEventListener('change', (evt) => {
+        if(evt.currentTarget.checked) {
+            pass.style.display = "none";
+        } else {
+            pass.style.display = "block";
+        }
+    });
+}
+
 function updateComment(id) {
     document.getElementById('edit-comment-' + id).classList.toggle('hidden');
     document.getElementById('body-comment-' + id).className = 'hidden';
@@ -114,5 +128,7 @@ window.onload = function() {
     toggleInputFile();
     toggleInputTag();
     comments();
+    hiddenUserPassword();
+
 };
 

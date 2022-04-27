@@ -18,6 +18,8 @@ use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use App\Models\EmailInvite;
+use App\Http\Requests\Dashboard\UserRequest;
 
 class UserController extends Controller
 {
@@ -50,13 +52,17 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
-        
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
-        $user->password = Hash::make($request->password);
+        if ($request->password !== null) {
+            $user->password = Hash::make($request->password);
+        } else {
+            $user->password = "";
+        }
+        
         $user->slug = Str::slug($request->name);
         $user->save();
 
@@ -65,13 +71,13 @@ class UserController extends Controller
         $role->role_id = $request->roles[0];
         $role->save();
         
-        if ($request->invite === 'on') {
-            event(new Profiled($user));
-        }
-
         // If email confirmation is required send an email to new user
         $setting = Setting::where('key', 'email-confirmation')->first();
-        if ($setting->value === 'true') {
+
+        if ($request->invite === 'on') {
+            $this->dataEmailInvite($request);
+            event(new Profiled($user));
+        } elseif($setting->value === 'true') {
             event(new UserAdded($user));
         }
         
@@ -80,10 +86,27 @@ class UserController extends Controller
             ->with('success', 'User created successfully');
     }
 
-    public function emailConfirmation(User $user, int $id)
+    private function dataEmailInvite(UserRequest $request)
     {
-        $account = $user->find($id);
-        dd($account);
+        $user = new EmailInvite();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->slug = Str::slug($request->name);
+        $user->save();
+    } 
+
+    public function emailInvitation(User $user, int $id)
+    {
+        $user = $user->findOrfail($id);
+        return view('users.invitation')->with('user', $user);
+    }
+
+    public function sendEmailVerifyFromEmailInvitation(User $user, int $id)
+    {
+        $user = $user->findOrfail($id);
+        event(new UserAdded($user));
+
+        return view('users.notify-verification-email')->with('user', $user);
     }
 
     /**
@@ -120,7 +143,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UserRequest $request, $id)
     {
         //
     }
@@ -142,4 +165,6 @@ class UserController extends Controller
 
         return redirect()->route('settings.users');
     }
+
+    
 }

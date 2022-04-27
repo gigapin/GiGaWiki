@@ -31,11 +31,12 @@ class AccountMail extends Mailable
      */
     public function build()
     {
-        $this->subject = "Account verification"; 
-        return $this->view('emails.accounts')
-            ->with([
+        $this->subject = "Invite to partecipe in GiGaWiki"; 
+        $url = route('email.invitation', $this->user->id);
+        return $this->markdown('emails.accounts', [
                 'name' => $this->user->name,
-                'email' => $this->user->email
+                'email' => $this->user->email,
+                'url' => $url
             ]);
     }
 }

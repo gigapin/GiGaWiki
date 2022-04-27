@@ -15,7 +15,7 @@ use App\Http\Controllers\Dashboard\PDFController;
 use App\Http\Controllers\Dashboard\ImageController;
 use App\Http\Controllers\Dashboard\SettingController;
 use App\Http\Controllers\Dashboard\UserController;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use App\Http\Controllers\Auth\UserInvitedRegisterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,22 +34,16 @@ Route::get('/', function () {
 
 require __DIR__.'/auth.php';
 
-Route::get('users/email-confirmation/{id}', [UserController::class, 'emailConfirmation'])->name('email.confirmation');
+Route::get('/register/{id}/{role_id}', [UserInvitedRegisterController::class, 'create'])
+                ->middleware('guest')
+                ->name('register');
 
-/** VERIFICATION EMAIL */
-// Route::get('/email/verify', function () {
-//     return view('auth.verify-email');
-// })->middleware('auth')->name('verification.notice');
-
-// Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-//     $request->fulfill();
- 
-//     return redirect('/dashboard');
-// })->middleware(['auth', 'signed'])->name('verification.verify');
+Route::post('/register/{id}/{role_id}', [UserInvitedRegisterController::class, 'store'])
+                ->middleware('guest');
 
 
 /** ROUTES AUTH MIDDLEWARE GROUP */
-Route::middleware(['auth'])->group(function() {
+Route::middleware(['auth', 'verified'])->group(function() {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('subjects', [SubjectController::class, 'index'])->name('subjects.index');

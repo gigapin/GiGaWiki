@@ -50,16 +50,6 @@
                 </div>
             </div>
 
-            <div class="py-6 border-b border-gray-300">
-                <h3>Send User Invite</h3>
-                <p>
-                    You can choose to send this user an invitation email. 
-                </p>
-                <div class="py-1">
-                    <input type="checkbox" name="" class="mr-2">Send user invite email
-                </div>
-            </div>
-
             <div class="py-6 text-right">
                 <x-link-button link="{{ route('users.delete', $user->id) }}" :label="'Delete User'" />
                 <x-button>Update User</x-button>
