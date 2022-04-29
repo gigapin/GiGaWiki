@@ -27,7 +27,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
-        'slug'
+        'slug',
+        'image_id'
     ];
 
     /**
@@ -64,6 +65,14 @@ class User extends Authenticatable implements MustVerifyEmail
     public function roles()
     {
         return $this->belongsToMany(Role::class);
+    }
+
+    /**
+     * @return HasOne
+     */
+    public function image()
+    {
+        return $this->hasOne(Image::class, 'created_by');
     }
 
     /**

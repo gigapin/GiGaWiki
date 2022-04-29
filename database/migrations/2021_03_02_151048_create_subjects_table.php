@@ -28,6 +28,10 @@ class CreateSubjectsTable extends Migration
                 ->on('users')
                 ->onDelete('cascade');
                 
+            $table->foreign('image_id')
+                ->references('id')
+                ->on('images')
+                ->onDelete('cascade');
         });
     }
 

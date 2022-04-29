@@ -20,14 +20,20 @@ function hiddenUserPassword()
 {
     const pass = document.getElementById('create-user-password');
     const check = document.getElementById('checkbox-user-invititation');
-    pass.style.display = "block";
-    check.addEventListener('change', (evt) => {
-        if(evt.currentTarget.checked) {
-            pass.style.display = "none";
-        } else {
-            pass.style.display = "block";
-        }
-    });
+    if (pass !== null) {
+        pass.style.display = "block";
+    }
+    
+    if(check !== null) {
+        check.addEventListener('change', (evt) => {
+            if(evt.currentTarget.checked) {
+                pass.style.display = "none";
+            } else {
+                pass.style.display = "block";
+            }
+        });
+    }
+    
 }
 
 function updateComment(id) {

@@ -11,7 +11,7 @@
                 
                 <div>
                 @if ($user->image_id !== null)
-                    <img src="" alt="" />
+                    <img src="{{ $user->image->url }}" alt="" class="rounded-full h-32 w-32 border border-gray-300"/>
                 @else
                     <i class="bi bi-person-square maxi-icons"></i>
                 @endif
@@ -62,7 +62,7 @@
             <h2>Edit / Remove Profile</h2>
             <div class="p-4 border border-gray-300 flex justify-around">
                 <div>
-                    <x-link-button link="{{ route('settings.users.edit', $user->slug) }}" :label="'Edit Profile'" />
+                    <x-link-button link="{{ route('users.edit', $user->slug) }}" :label="'Edit Profile'" />
                 </div>
                 <div>
                     <x-link-button link="{{ route('users.delete', $user->id) }}" :label="'Remove User'" />

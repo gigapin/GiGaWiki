@@ -2,7 +2,7 @@
 <div class="my-3">
     <div class="w-full py-2 border-2 border-gray-200">
         <button type="button" class="w-full text-left text-gray-500" id="btn-input-file">
-            <span><i class="bi bi-arrow-right-short"></i>Cover Image</span>
+            <span><i class="bi bi-arrow-right-short"></i>Upload Image</span>
         </button>
     </div>
 

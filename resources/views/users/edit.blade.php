@@ -1,63 +1,63 @@
 <x-app-layout>
 
-    <div class="container">
+    <x-actions-bar></x-actions-bar>
 
-        <form action="{{ route('accounts.update', $account->id) }}" method="POST" enctype="multipart/form-data">
+    <x-create-form :model="''">
+
+        
+
+        <form action="{{ route('users.update', $user->slug) }}" method="POST" enctype="multipart/form-data">
             @csrf
-            @method('PUT')
+            @method('PATCH')
 
-            <div class="mb-3">
-                <label for="exampleFormControlInput1" class="form-label">City</label>
-                <input type="text" class="form-control" id="exampleFormControlInput1" name="city" value="{{ is_null($account->city) ? '' : $account->city }}">
-            </div>
-            <div class="mb-3">
-                <label for="exampleFormControlInput1" class="form-label">Country</label>
-                <input type="text" class="form-control" id="exampleFormControlInput1" name="country" value="{{ is_null($account->country) ? '' : $account->country }}">
-            </div>
-            <div class="mb-3">
-                <label for="exampleFormControlInput1" class="form-label">Language</label>
-                <input type="text" class="form-control" id="exampleFormControlInput1" name="language" value="{{ is_null($account->language) ? '' : $account->language }}">
-            </div>
-            @if($account->visibility === 'private')
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="private" id="flexCheckDefault" name="visibility" checked>
-                    <label class="form-check-label" for="flexCheckDefault">
-                        Private
-                    </label>
+            <h1 class="text-center mb-0">Edit User</h1>
+
+            <div class="py-6 border-b border-gray-300">
+                <h3>User Details</h3>
+                <p>
+                    Set a display name and an email address for this user. The email address will be used for logging into the application.
+                </p>
+                <div class="md:flex md:justify-between">
+                    <div class="w-full md:w-1/3 pr-6">
+                        <p>Name</p>
+                        <x-input type="text" name="name" value="{{ $user->name }}" />
+                    </div>
+                    <div class="w-full md:w-1/3 pr-6">
+                        <p>Email</p>
+                        <x-input type="text" name="email" value="{{ $user->email }}" />
+                    </div>
+                    <div class="w-full md:w-1/3">
+                        <p>Password</p>
+                        <x-input type="password" name="password" />
+                    </div>
                 </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="public" id="flexCheckChecked" name="visibility">
-                    <label class="form-check-label" for="flexCheckChecked">
-                        Public
-                    </label>
-                </div>
-            @else
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="private" id="flexCheckDefault" name="visibility">
-                    <label class="form-check-label" for="flexCheckDefault">
-                        Private
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="public" id="flexCheckChecked" name="visibility" checked>
-                    <label class="form-check-label" for="flexCheckChecked">
-                        Public
-                    </label>
-                </div>
-            @endif
-            @if(! is_null($account->avatar))
-                <img src="{{ asset('storage/' . $account->avatar) }}" alt="" class="img-thumbnail" width="200" height="200">
-            @endif
-            <div class="input-group">
-                <input type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload" name="avatar">
-                <button class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon04">Button</button>
             </div>
-            <div class="mt-3">
-                <button type="submit" class="btn btn-primary">Update</button>
+
+            <div class="py-6 border-b border-gray-300">
+                <h3>Edit Avatar</h3>
+                @if ($user->image_id !== null)
+                    <img src="{{ asset($avatar->url) }}" alt="" />
+                @else
+                    <i class="bi bi-person-square maxi-icons"></i>
+                @endif
+                
+               
+                    <x-input-file :name="'featured'" :label="'Select an avatar'" />
+               
             </div>
+
+            <div class="py-6 border-b border-gray-300">
+                <h3>User Role</h3>
+                <input type="text" name="roles" id="" value="{{ $role }}" readonly>
+            </div>
+
+            <div class="py-6 text-right">
+                <x-link-button link="{{ route('users.delete', $user->id) }}" :label="'Delete User'" />
+                <x-button>Update User</x-button>
+            </div>
+            
         </form>
-
-    </div>
-
+       
+    </x-create-form>
 
 </x-app-layout>

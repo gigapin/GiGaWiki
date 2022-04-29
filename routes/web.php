@@ -43,7 +43,7 @@ Route::post('/register/{id}/{role_id}', [UserInvitedRegisterController::class, '
 
 
 /** ROUTES AUTH MIDDLEWARE GROUP */
-Route::middleware(['auth', 'verified'])->group(function() {
+Route::middleware(['auth'])->group(function() {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('subjects', [SubjectController::class, 'index'])->name('subjects.index');
@@ -115,9 +115,12 @@ Route::middleware(['auth', 'verified'])->group(function() {
     Route::get('settings/users', [SettingController::class, 'users'])->name('settings.users');
     Route::get('settings/roles', [SettingController::class, 'roles'])->name('settings.roles');
     Route::get('settings/users/{slug}/edit', [SettingController::class, 'editUser'])->name('settings.users.edit');
-    Route::put('settings/users/{slug}', [SettingController::class, 'updateUser'])->name('settings.users.update');
+    Route::patch('settings/users/{slug}', [SettingController::class, 'updateUser'])->name('settings.users.update');
 
     Route::resource('users', UserController::class);
+    Route::get('users/{slug}', [UserController::class, 'show'])->name('users.show');
+    Route::get('users/{slug}/edit', [UserController::class, 'edit'])->name('users.edit');
+    Route::patch('users/{slug}', [UserController::class, 'update'])->name('users.update');
     Route::get('users/delete/{id}', [UserController::class, 'delete'])->name('users.delete');
     
 

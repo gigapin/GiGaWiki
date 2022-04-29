@@ -12,11 +12,18 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Image;
 use Illuminate\Support\Facades\Auth;
 use App\Models\RoleUser;
+use App\Traits\HasUploadFile;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class SettingController extends Controller
 {
+    use HasUploadFile;
+
+    /**
+     * @var array
+     */
     protected array $keys = [
         'allow-public-access',
         'disable-comments',
@@ -118,9 +125,9 @@ class SettingController extends Controller
     public function users()
     {
         $this->authorize('viewAny', Setting::class);
-
+        
         return view('settings.users', [
-            'users' => User::all(),
+            'users' => User::all(),    
         ]);
     }
 
@@ -137,10 +144,15 @@ class SettingController extends Controller
         foreach($user->roles as $role) {
             $role = $role->name;
         }
+        $showUploadAvatar = false;
+        if (auth()->user()->id === $user->id) {
+            $showUploadAvatar = true;
+        }
         
         return view('settings.edit-user', [
             'user' => $user, 
-            'role' => $role
+            'role' => $role,
+            'showUploadAvatar' => $showUploadAvatar
         ]);
     }
 
@@ -153,15 +165,23 @@ class SettingController extends Controller
     public function updateUser(Request $request, string $slug)
     {
         $this->authorize('update', Setting::class);
-
+        
         $user = User::where('slug', $slug)->first();
         $role = RoleUser::where('user_id', $user->id)->first();
         $roles['role_id'] = $request->roles[0];
         $data['name'] = $request->name;
         $data['email'] = $request->email;
-        $data['password'] = Hash::make($request->password);
-
-        $user->update($data);
+        if ($request->password !== null) {
+            $data['password'] = Hash::make($request->password);
+        }
+        
+        $data['slug'] = Str::slug($request->name);
+        if ($request->hasFile('featured')) {
+            $this->renderFeatured('featured');
+            $data['image_id'] = $this->saveImageFeatured('featured', 'avatar')->id;
+        }
+        $userUpdated = User::findOrFail($user->id);
+        $userUpdated->update($data);
         $role->update($roles);
 
         return redirect()->route('settings.users');

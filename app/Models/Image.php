@@ -21,4 +21,9 @@ class Image extends Model
         'type'
     ];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
 }

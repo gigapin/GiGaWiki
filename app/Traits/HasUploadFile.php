@@ -101,13 +101,13 @@ trait HasUploadFile
      * @param string $image_name
      * @return Image
      */
-    public function saveImageFeatured(string $image_name)
+    public function saveImageFeatured(string $image_name, string $type = 'cover')
     {
         return Image::create([
             'name' => $this->renderFeatured($image_name),
             'url' => env('APP_URL') . '/storage/uploads/' . Auth::id() . '/' . $this->renderFeatured($image_name),
             'path' => 'uploads/' . Auth::id() . '/' . $this->renderFeatured($image_name),
-            'type' => 'cover',
+            'type' => $type,
             'created_by' => Auth::id(),
             'updated_by' => Auth::id(),
         ]);

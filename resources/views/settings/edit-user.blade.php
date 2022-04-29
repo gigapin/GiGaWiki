@@ -6,9 +6,9 @@
 
         @include('partials.menu-settings')
 
-        <form action="{{ route('settings.users.update', $user->slug) }}" method="POST">
+        <form action="{{ route('settings.users.update', $user->slug) }}" method="POST" enctype="multipart/form-data">
             @csrf
-            @method('PUT')
+            @method('PATCH')
 
             <h1 class="text-center mb-0">Edit User</h1>
 
@@ -28,7 +28,7 @@
                     </div>
                     <div class="w-full md:w-1/3">
                         <p>Password</p>
-                        <x-input type="password" name="password" value="{{ $user->password }}" />
+                        <x-input type="password" name="password" />
                     </div>
                 </div>
             </div>
@@ -48,6 +48,19 @@
                 <div class="py-1">
                     <input type="radio" name="roles[]" value="3" class="mr-2" @if($role === 'Guest')checked @endif>Guest
                 </div>
+            </div>
+
+            <div class="py-6 border-b border-gray-300">
+                <h3>Edit Avatar</h3>
+                @if ($user->image_id !== null)
+                    <img src="{{ asset($user->image->url) }}" alt="" />
+                @else
+                    <i class="bi bi-person-square maxi-icons"></i>
+                @endif
+                
+                @if($showUploadAvatar === true)
+                    <x-input-file :name="'featured'" :label="'Select an avatar'" />
+                @endif
             </div>
 
             <div class="py-6 text-right">

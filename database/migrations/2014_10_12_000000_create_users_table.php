@@ -25,15 +25,20 @@ class   CreateUsersTable extends Migration
             $table->unsignedBigInteger('image_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
+
+            $table->foreign('image_id')
+                ->references('id')
+                ->on('images')
+                ->onDelete('cascade');
         });
 
         DB::table('users')->insert([
             [
-                'name' => 'admin', 
+                'name' => 'Admin', 
                 'email' => 'admin@admin.com', 
                 'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
                 'slug' => 'admin',
-                'remember_token' => 'dNfScag3PH',
+                'remember_token' => '',
             ]
         ]);
     }

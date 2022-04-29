@@ -20,9 +20,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use App\Models\EmailInvite;
 use App\Http\Requests\Dashboard\UserRequest;
+use App\Traits\HasUploadFile;
 
 class UserController extends Controller
 {
+    use HasUploadFile;
+    
     /**
      * Display a listing of the resource.
      *
@@ -77,8 +80,10 @@ class UserController extends Controller
         if ($request->invite === 'on') {
             $this->dataEmailInvite($request);
             event(new Profiled($user));
-        } elseif($setting->value === 'true') {
-            event(new UserAdded($user));
+        } elseif($setting->value !== null) {
+            if ($setting->value === 'true') {
+                event(new UserAdded($user));
+            }
         }
         
         return redirect()
@@ -115,10 +120,10 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(string $slug)
     {
         return view('users.show')
-            ->with('user', User::findOrFail($id))
+            ->with('user', User::where('slug', $slug)->first())
             ->with('subject', Subject::where('user_id', Auth::id())->count())
             ->with('project', Project::where('user_id', Auth::id())->count())
             ->with('page', Page::where('created_by', Auth::id())->count())
@@ -131,9 +136,16 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(string $slug)
     {
-        //
+        $user = User::where('slug', $slug)->first();
+        foreach($user->roles as $role) {
+            $role = $role->name;
+        }
+        
+        return view('users.edit')
+            ->with('user', $user)
+            ->with('role', $role);
     }
 
     /**
@@ -143,9 +155,22 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UserRequest $request, $id)
+    public function update(Request $request, string $slug)
     {
-        //
+        $user = User::where('slug', $slug)->first();
+        $data['name'] = $request->name;
+        $data['email'] = $request->email;
+        if ($request->password !== null) {
+            $data['password'] = Hash::make($request->password);
+        }
+        $data['slug'] = Str::slug($request->name);
+        if ($request->hasFile('featured')) {
+            $this->renderFeatured('featured');
+            $data['image_id'] = $this->saveImageFeatured('featured', 'avatar')->id;
+        }
+        $user->update($data);
+
+        return redirect()->route('users.show', $user->slug);
     }
 
     public function delete(int $id)
