@@ -51,7 +51,7 @@ Route::middleware(['auth'])->group(function() {
     Route::post('subjects', [SubjectController::class, 'store'])->name('subjects.store');
     Route::get('subjects/{slug}', [SubjectController::class, 'show'])->name('subjects.show');
     Route::get('subjects/{slug}/edit', [SubjectController::class, 'edit'])->name('subjects.edit');
-    Route::put('subjects/{slug}', [SubjectController::class, 'update'])->name('subjects.update');
+    Route::patch('subjects/{slug}', [SubjectController::class, 'update'])->name('subjects.update');
     Route::get('subjects/{slug}/destroy', [SubjectController::class, 'delete'])->name('subjects.destroy');
     Route::delete('subjects/{slug}', [SubjectController::class, 'destroy'])->name('subjects.delete');
 

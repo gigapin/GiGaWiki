@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 class CreateSettingsTable extends Migration
 {
@@ -19,6 +20,17 @@ class CreateSettingsTable extends Migration
             $table->string('value');
 
         });
+
+        // 'allow-public-access',
+        // 'disable-comments',
+        // 'enable-registration',
+        // 'email-confirmation'
+
+        DB::table('settings')->insert([
+            ['key' => 'allow-public-access', 'value' => 'true'],
+            ['key' => 'disable-comments', 'value' => 'false'],
+            ['key' => 'email-confirmation', 'value' => 'true']
+        ]);
     }
 
     /**

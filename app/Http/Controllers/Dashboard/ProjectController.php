@@ -146,12 +146,14 @@ class ProjectController extends GigawikiController
     public function update(ProjectRequest $request, string $slug)
     {
         $data = $this->getDataForm($request);
+        
         if ($request->hasFile('featured') && $request->file('featured')->isValid()) {
             $this->renderFeatured('featured');
             $data['image_id'] = $this->updateImageFeatured('featured', $request->image_id)->id;
         }
         $project = Project::getProject($slug);
         $project->update($data);
+
         if(request()->tags !== null) {
             Tag::updateTags($project, 'project');
         }

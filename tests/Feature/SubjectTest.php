@@ -128,7 +128,7 @@ class SubjectTest extends TestCase
         $this->create_user(1);
         $res = $this->actingAs($this->user)->get('/subjects/create');
         $res->assertStatus(200);
-        $res->assertSeeText(['Save', 'Select an image', 'Tags', 'Cover Image']);
+        $res->assertSeeText(['Save', 'Select an image', 'Tags', 'Upload Image']);
     }
 
     /**
@@ -242,7 +242,7 @@ class SubjectTest extends TestCase
         );
         $name = $this->faker->text(30);
         $des =  $this->faker->paragraph(2, true);
-        $res = $this->actingAs($this->user)->put("subjects/$subject->slug", [
+        $res = $this->actingAs($this->user)->patch("subjects/$subject->slug", [
             'user_id' => $this->user->id,
             'name' => $name,
             'slug' => Str::slug($name),
@@ -264,7 +264,7 @@ class SubjectTest extends TestCase
         );
         $name = $this->faker->text(30);
         $des =  $this->faker->paragraph(2, true);
-        $res = $this->actingAs($this->user)->put("subjects/$subject->slug", [
+        $res = $this->actingAs($this->user)->patch("subjects/$subject->slug", [
             'user_id' => $this->user->id,
             'name' => $name,
             'slug' => Str::slug($name),

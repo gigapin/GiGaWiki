@@ -8,7 +8,7 @@
         
         <form action="{{ route('subjects.update', $slug->slug) }}" method="POST" enctype="multipart/form-data">
             @csrf
-            @method('PUT')
+            @method('PATCH')
 
             <x-breadcrumb :root="'subjects'" link="{{ route('subjects.show', $slug->slug) }}" name="{{ $slug->name }}" :value="'Update'" />
 

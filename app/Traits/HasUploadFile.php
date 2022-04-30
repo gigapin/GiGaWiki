@@ -123,7 +123,7 @@ trait HasUploadFile
         if($image_id !== null) {
             $image = Image::find($image_id);
             if($image !== null) {
-                if(file_exists(storage_path('app/public/' . $image->path))) {
+                if(file_exists(storage_path('app/public/' . $image->path))) { 
                     $image->delete();
                     Storage::delete($image->path);
                 }

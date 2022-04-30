@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use App\Models\EmailInvite;
 use App\Http\Requests\Dashboard\UserRequest;
+use App\Models\Image;
 use App\Traits\HasUploadFile;
 
 class UserController extends Controller
@@ -122,11 +123,15 @@ class UserController extends Controller
      */
     public function show(string $slug)
     {
+        $user = User::where('slug', $slug)->first();
+        $image = Image::where('id', $user->image_id)->where('type', 'avatar')->first();
+
         return view('users.show')
             ->with('user', User::where('slug', $slug)->first())
             ->with('subject', Subject::where('user_id', Auth::id())->count())
             ->with('project', Project::where('user_id', Auth::id())->count())
             ->with('page', Page::where('created_by', Auth::id())->count())
+            ->with('image', $image)
             ->with('page_updated', Page::where('updated_by', Auth::id())->count());
     }
 
@@ -139,12 +144,14 @@ class UserController extends Controller
     public function edit(string $slug)
     {
         $user = User::where('slug', $slug)->first();
+        $image = Image::where('id', $user->image_id)->where('type', 'avatar')->first();
         foreach($user->roles as $role) {
             $role = $role->name;
         }
         
         return view('users.edit')
             ->with('user', $user)
+            ->with('image', $image)
             ->with('role', $role);
     }
 
@@ -158,6 +165,8 @@ class UserController extends Controller
     public function update(Request $request, string $slug)
     {
         $user = User::where('slug', $slug)->first();
+        $image = Image::where('id', $user->image_id)->where('type', 'avatar')->first();
+        
         $data['name'] = $request->name;
         $data['email'] = $request->email;
         if ($request->password !== null) {
@@ -167,6 +176,10 @@ class UserController extends Controller
         if ($request->hasFile('featured')) {
             $this->renderFeatured('featured');
             $data['image_id'] = $this->saveImageFeatured('featured', 'avatar')->id;
+            if($image !== null) {
+                $this->deleteFeatured($image->id);
+            }
+            
         }
         $user->update($data);
 

@@ -32,6 +32,8 @@ class SubjectController extends GigawikiController
      */
     public function index()
     {
+        // $subject = Subject::find(1);
+        
         return view('subjects.index', [
             'bodies' => Subject::latest()->paginate(env('APP_PAGE')),
             'activities' => $this->getActivity()->setActivity('subject'),
@@ -149,13 +151,18 @@ class SubjectController extends GigawikiController
         $this->authorize('update', Subject::class);
 
         $data = $this->getDataForm($request);
-        if ($request->hasFile('featured')) {
+        
+        if ($request->hasFile('featured') && $request->file('featured')->isValid()) {
             $this->renderFeatured('featured');
             $data['image_id'] = $this->updateImageFeatured('featured', $request->image_id)->id;
         }
-        Tag::updateTags(Subject::getSubject($slug), 'subject');
+        
         $subject = Subject::getSubject($slug);
         $subject->update($data);
+
+        if (\request()->tags !== null) {
+            Tag::updateTags(Subject::getSubject($slug), 'subject');
+        }
         $this->getActivity()->saveActivity('updated', $subject->id, 'subject', $subject->name);
 
         return redirect()
@@ -214,6 +221,7 @@ class SubjectController extends GigawikiController
      */
     public function getDataForm($request)
     {
+        $data = $request->all();
         $data['name'] = $request->name;
         $data['description'] = $request->description;
         $data['user_id'] = Auth::id();

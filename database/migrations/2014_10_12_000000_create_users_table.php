@@ -26,10 +26,6 @@ class   CreateUsersTable extends Migration
             $table->rememberToken();
             $table->timestamps();
 
-            $table->foreign('image_id')
-                ->references('id')
-                ->on('images')
-                ->onDelete('cascade');
         });
 
         DB::table('users')->insert([

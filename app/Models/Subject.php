@@ -28,6 +28,11 @@ class Subject extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function image()
+    {
+        return $this->hasOne(Image::class, 'created_by');
+    }
+
     public function setDescriptionAttribute($value)
     {
         $this->attributes['description'] = htmlspecialchars($value, ENT_QUOTES); 

@@ -36,7 +36,7 @@
             <div class="py-6 border-b border-gray-300">
                 <h3>Edit Avatar</h3>
                 @if ($user->image_id !== null)
-                    <img src="{{ asset($avatar->url) }}" alt="" />
+                    <img src="{{ asset($image->url) }}" alt="" />
                 @else
                     <i class="bi bi-person-square maxi-icons"></i>
                 @endif
@@ -52,7 +52,9 @@
             </div>
 
             <div class="py-6 text-right">
-                <x-link-button link="{{ route('users.delete', $user->id) }}" :label="'Delete User'" />
+                @if($user->id !== 1)
+                    <x-link-button link="{{ route('users.delete', $user->id) }}" :label="'Delete User'" />
+                @endif
                 <x-button>Update User</x-button>
             </div>
             
