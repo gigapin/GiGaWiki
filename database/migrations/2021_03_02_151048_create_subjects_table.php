@@ -20,6 +20,7 @@ class CreateSubjectsTable extends Migration
             $table->string('slug');
             $table->text('description')->nullable();
             $table->unsignedBigInteger('image_id')->nullable();
+            $table->tinyInteger('visibility')->default(1);
             $table->softDeletes();
             $table->timestamps();
 

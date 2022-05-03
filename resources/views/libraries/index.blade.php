@@ -1,13 +1,9 @@
-<x-app-layout>
-    <x-toolbar :title="$title" :link="$link" />
+<x-library-layout>
 
-    <div class="container">
-        @if(count($bodies) < 1)
-            @include('partials.unvailable')
-        @else
-            <x-alert type="success" message="{{ session()->get('success') }}" />
-            <x-table :heads="$heads" :bodies="$bodies" :url="$title" />
-            {{ $bodies->links() }}
-        @endif
+    <div class="w-full md:grid md:grid-cols-3 md:gap-8">  
+        @foreach ($subjects as $item)
+            <x-welcome-cards name="{{ $item->name }}" description="{{ $item->description }}" author="{{ $item->user->name }}" date="{{ $item->created_at }}" slug="{{ $item->slug }}" url="{{ route('library.show', $item->slug) }}"/>
+        @endforeach
     </div>
-</x-app-layout>
+
+</x-library-layout>

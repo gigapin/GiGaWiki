@@ -24,6 +24,7 @@ class CreatePagesTable extends Migration
             $table->string('title')->unique();
             $table->string('slug');
             $table->text('content');
+            $table->tinyInteger('visibility')->default(1);
             $table->tinyInteger('restricted')->default(0);
             $table->integer('current_revision')->default(0);
             $table->softDeletes();

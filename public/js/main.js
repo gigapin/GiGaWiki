@@ -66,15 +66,18 @@ function toggleProfile()
 {
     const btn = document.getElementById('user-menu-button');
     const windowProfile = document.getElementById('window-profile');
-    windowProfile.style.display = 'none';
-    btn.addEventListener('click', function() {
-        if (windowProfile.style.display === 'none') {
-            windowProfile.style.display = 'block';
-        } else {
-            windowProfile.style.display = 'none';
-        }
-
-    });
+    if(windowProfile !== null) {
+        windowProfile.style.display = 'none';
+        btn.addEventListener('click', function() {
+            if (windowProfile.style.display === 'none') {
+                windowProfile.style.display = 'block';
+            } else {
+                windowProfile.style.display = 'none';
+            }
+    
+        });
+    }
+    
 }
 
 // Toggle mobile menu
@@ -82,14 +85,17 @@ function toggleHamburger()
 {
     const btn = document.getElementById('btn-menu');
     const menuMobile = document.getElementById('menu-mobile');
-    menuMobile.style.display = 'none';
-    btn.addEventListener('click', function() {
-        if (menuMobile.style.display === 'none') {
-            menuMobile.style.display = 'block';
-        } else {
-            menuMobile.style.display = 'none';
-        }
-    });
+    if (menuMobile !== null) {
+        menuMobile.style.display = 'none';
+        btn.addEventListener('click', function() {
+            if (menuMobile.style.display === 'none') {
+                menuMobile.style.display = 'block';
+            } else {
+                menuMobile.style.display = 'none';
+            }
+        });
+    }
+   
 }
 
 function toggleInputFile()
@@ -128,6 +134,32 @@ function appendTag()
     element.after(addInputTag);
 }
 
+function toggleMenuDocument()
+{
+    const btn = document.getElementById('show-sidebar');
+    const sidebar = document.getElementById('menux');
+    const doc = document.getElementById('doc-section');
+    const footer = document.getElementById('doc-footer');
+
+    if (sidebar !== null) {
+       
+        btn.addEventListener('click', function() {
+            sidebar.classList.toggle('hidden');
+            if(sidebar.classList.contains('hidden')) {
+                sidebar.style.display = "none";
+                doc.classList.remove('hidden');
+                footer.classList.remove('hidden');
+            } else {
+                sidebar.classList.remove('hidden');
+                sidebar.style.display = "block";
+                doc.classList.add('hidden');
+                footer.classList.add('hidden');
+            }
+        });
+    }
+   
+}
+
 window.onload = function() {
     toggleProfile();
     toggleHamburger();
@@ -135,6 +167,6 @@ window.onload = function() {
     toggleInputTag();
     comments();
     hiddenUserPassword();
-
+    toggleMenuDocument();
 };
 

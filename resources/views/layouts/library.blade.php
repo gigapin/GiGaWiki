@@ -24,18 +24,19 @@
     </head>
     <body class="antialiased">
     
-        <div class="container mx-auto mt-4 w-9/12 flex justify-between text-lg text-gray-300">
+        <div class="container mx-auto mt-4 w-11/12 flex justify-between text-lg text-gray-300">
             <div>Powered by GiGawiki</div>
-            <div>Login</div>
+            <div>
+                <a href="{{ route('library') }}" class="text-gray-300 no-underline">Home</a>
+                <a href="{{ route('login') }}" class="text-gray-300 no-underline">Login</a>
+            </div>
         </div>
         <!-- Wrapper -->
-        <div class="container mx-auto mt-4 w-9/12 bg-green-600 p-4">
+        <div class="container mx-auto mt-4 w-full md:w-11/12 lg:w-10/12 xl:w-9/12 bg-green-600 p-4">
             <p class="text-center text-2xl sm:text-4xl mb-4 pt-4 text-white font-extrabold">GiGaWiki</p>
             <p class="text-center text-2xl sm:text-2xl mb-8  text-gray-300 font-bold">Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
-
-            <div class="grid grid-cols-3 gap-8">
-                
-            </div>
+               
+            {{ $slot }}
             
         </div>
     </body>

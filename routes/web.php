@@ -16,7 +16,9 @@ use App\Http\Controllers\Dashboard\ImageController;
 use App\Http\Controllers\Dashboard\SettingController;
 use App\Http\Controllers\Dashboard\UserController;
 use App\Http\Controllers\Auth\UserInvitedRegisterController;
-
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LibraryController;
+use App\Http\Controllers\DocumentController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -28,9 +30,15 @@ use App\Http\Controllers\Auth\UserInvitedRegisterController;
 |
 */
 
-Route::get('/', function () {
-    return view('auth.login');
-});
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/library', [LibraryController::class, 'index'])->name('library');
+Route::get('/library/{slug}', [LibraryController::class, 'show'])->name('library.show');
+Route::get('/document/{slug}', [DocumentController::class, 'index'])->name('document');
+Route::get('/document/{project}/{section}/{slug}', [DocumentController::class, 'show'])->name('document.show');
+
+
+
+
 
 require __DIR__.'/auth.php';
 
@@ -43,7 +51,7 @@ Route::post('/register/{id}/{role_id}', [UserInvitedRegisterController::class, '
 
 
 /** ROUTES AUTH MIDDLEWARE GROUP */
-Route::middleware(['auth'])->group(function() {
+Route::middleware(['auth'])->prefix('dashboard')->group(function() {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('subjects', [SubjectController::class, 'index'])->name('subjects.index');
