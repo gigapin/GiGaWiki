@@ -109,7 +109,7 @@ class CommentController extends GigawikiController
      */
     public function getDataForm($request, $item, $model, $id = null)
     {
-        dd($item);
+        
         $comment['body'] = $request->body;
         $comment['user_id'] = Auth::id();
         $comment['page_id'] = $item->id;

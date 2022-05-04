@@ -5,7 +5,7 @@
             <a href="{{ $url }}">{{ $name }}</a>    
         </div>
         
-        {{ $description }}
+        {{-- {{ $description }} --}}
         
     </div>
     <div class="px-6 pt-4 pb-2">

@@ -7,7 +7,7 @@
         @else
             <a href="{{ route($model . '.show', $slug) }}" class="font-bold text-purple-700">{{ Str::limit($title, 20) }}</a>
         @endif
-        <p class="font-bold text-gray-500 text-sm">{{ $body }}</p>
+        {{-- <p class="font-bold text-gray-500 text-sm">Author: {{ Auth::user()->name }}</p> --}}
     </div>
 
     <div class="w-11/12 mx-auto pt-4 pb-2 h-12 text-xs flex justify-between lg:w-8/12 ">

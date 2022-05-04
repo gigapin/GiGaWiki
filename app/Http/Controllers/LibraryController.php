@@ -10,7 +10,7 @@ class LibraryController extends Controller
 {
     public function index()
     {
-        $subjects = Subject::where('visibility', 1)->get();
+        $subjects = Subject::where('visibility', 1)->orderByDesc('updated_at')->paginate(12);
         
         return view('libraries.index', [
             'subjects' => $subjects
@@ -21,6 +21,7 @@ class LibraryController extends Controller
     {
         $subject = Subject::where('slug', $slug)->firstOrFail();
         $project = Project::where('visibility', 1)->where('subject_id', $subject->id)->get();
+       
         return view('libraries.show')
             ->with('projects', $project);
     }

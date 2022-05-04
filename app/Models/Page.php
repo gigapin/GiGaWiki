@@ -154,7 +154,7 @@ class Page extends Model
     {
         return Page::where('project_id', $page->project_id)
             ->where('id', '>', $page->id)
-            ->orderByDesc('id')
+            ->orderBy('id')
             ->first();
     }
 
@@ -177,7 +177,7 @@ class Page extends Model
     public function setNextDocPaginate(object $page)
     {
         return Page::where('project_id', $page->project_id)
-            ->where('id', '>', $page->id)
+            ->where('id', '>=', $page->id)
             ->orderBy('id')
             ->first();
     }
@@ -188,6 +188,7 @@ class Page extends Model
      */
     public function setPrevDocPaginate(object $page)
     {
+        
         return Page::where('project_id', $page->project_id)
             ->where('id', '<', $page->id)
             ->orderByDesc('id')

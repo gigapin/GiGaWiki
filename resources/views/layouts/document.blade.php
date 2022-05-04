@@ -20,16 +20,19 @@
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
         <style>
-             body {
-                font-family: 'Nunito', sans-serif;
+            #document-bg {
                 background-color: #0b5345;
             }
             #menux {
                 overflow-y: scroll;
             }
+
+            main {
+                max-height: auto;
+            }
         </style>
     </head>
-    <body class="antialiased">
+    <body class="antialiased" id="document-bg">
         <div class="w-full my-4 flex justify-between text-lg text-gray-300">
             <div class="pl-4">Powered by GiGawiki</div>
             <div class="pr-4">
@@ -38,59 +41,18 @@
             </div>
         </div>
          
-        <main class="md:grid md:grid-rows-3 md:grid-flow-col gap-4">
+        <main class="min-h-screen md:grid md:grid-rows-3 md:grid-flow-col md:gap-4">
+            {{--  --}}
             
             <div class="h-12 w-full md:hidden bg-gray-200">
                 <button id="show-sidebar" class="w-12 h-12 bg-green-500 float-right">
                     <i class="bi bi-menu-button-wide text-xl text-white"></i>
                 </button>
             </div>
-          
-            <sidebar class="hidden w-10/12 bg-gray-300 md:block md:row-span-3 md:w-56 lg:w-80 xl:w-96 max-h-screen p-4 " id="menux">
-                <p class="text-xl md:text-2xl font-bold">{{ $project->name }}</p>
-                <ul class="list-none">
-                    @foreach($sections as $section)
-                        <li>
-                            <p class=" text-lg md:text-xl font-bold text-gray-800 mb-0 bg-gray-200 py-1 px-2">{{ $section->title }}</p>
-                            <ul class="list-none mt-0">
-                                @foreach($pages as $page)
-                                    @if($page->section_id === $section->id)
-                                        <li class="border-b border-gray-400 mt-1 p-1">
-                                            <a class="text-sm text-gray-800" href="{{ route('document.show', [$project->slug, $section->slug, $page->slug]) }}">{{ $page->title }}</a>    
-                                        </li>
-                                    @endif
-                                @endforeach
-                            </ul>
-                        </li>
-                    @endforeach
-                </ul>
-            </sidebar>
- 
-            <section class="md:col-span-2 min-h-screen bg-gray-50 py-4 px-6" id="doc-section">
-                <h2>{{ $doc->title }}</h2>
-                {{ $doc->content }}
-            </section>
 
-            <footer class="md:row-span-2 md:col-span-2 md:h-12 md:-mt-48 bg-gray-50 p-2 border-t border-gray-300" id="doc-footer">
-                @if ($prev !== null || $next != null)
-                    <div class="p-3 mt-6">
-                        <div class="flex justify-between">
-                            <div>
-                                @if ($prev !== null)
-                                    <i class="bi bi-box-arrow-left float-left text-indigo-500"></i>
-                                    <a href="{{ route('document.show', [$project->slug, $prev->section->slug, $prev->slug]) }}" class="text-gray-500 hover:underline hover:text-gray-800 pl-2">{{ $prev->slug }}</a>
-                                @endif
-                            </div>
-                            <div>
-                                @if ($next !== null)
-                                    <a href="{{ route('document.show', [$project->slug, $next->section->slug, $next->slug]) }}" class="float-left text-gray-500 hover:underline hover:text-gray-800 pr-2">{{ $next->slug }}</a>
-                                    <i class="bi bi-box-arrow-right text-indigo-500"></i>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                @endif
-            </footer>
+            {{ $slot }}
+
+            
         </main>
         
 
