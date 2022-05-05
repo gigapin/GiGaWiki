@@ -30,8 +30,8 @@ use App\Http\Controllers\DocumentController;
 |
 */
 
-//Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/', [LibraryController::class, 'index'])->name('library');
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/library', [LibraryController::class, 'index'])->name('library');
 Route::get('/library/{slug}', [LibraryController::class, 'show'])->name('library.show');
 Route::get('/document/{slug}', [DocumentController::class, 'index'])->name('document');
 Route::get('/document/{project}/{section}/{slug}', [DocumentController::class, 'show'])->name('document.show');

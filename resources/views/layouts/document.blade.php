@@ -34,7 +34,8 @@
     </head>
     <body class="antialiased" id="document-bg">
         <div class="w-full my-4 flex justify-between text-lg text-gray-300">
-            <div class="pl-4">Powered by GiGawiki</div>
+            <div class="max-h-10 max-w-md"><img src="{{ asset('images/GiGaWiki-logo-web.png') }}" alt="" class="h-auto w-48"></div>
+
             <div class="pr-4">
                 <a href="{{ route('library') }}" class="text-gray-300 no-underline mr-4">Home</a>
                 <a href="{{ route('login') }}" class="text-gray-300 no-underline">Login</a>

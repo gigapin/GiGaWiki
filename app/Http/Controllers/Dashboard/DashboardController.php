@@ -24,11 +24,12 @@ class DashboardController extends GigawikiController
     {
         $getUrl = array();
         $visited = $this->getView()->showAllViews();
+        
         foreach ($visited as $view) {
             $model = "App\Models\\" . ucfirst($view->page_type);
             $getUrl[] = $model::find($view->page_id);
         }
-    
+        
         return view('dashboard', [
             'projects' => Project::where('user_id', Auth::id())->get(),
             'activities' => $this->getActivity()->showAllActivity(),

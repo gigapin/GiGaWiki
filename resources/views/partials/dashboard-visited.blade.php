@@ -45,11 +45,13 @@
                         <i class="bi bi-file-earmark-text icons"></i>
                     </div>
                     <div class="ml-4 pl-4 mb-2">
-                        @foreach($url as $row)
-                            @if($view->page_id == $row->id)
-                                <a href="{{ route($view->page_type . 's.show', $row->slug) }}">{{ $row->$name }}</a>
-                            @endif
-                        @endforeach
+                        @if($url !== null)
+                            @foreach($url as $row)
+                                @if($view->page_id == $row->id)
+                                    <a href="{{ route($view->page_type . 's.show', $row->slug) }}">{{ $row->$name }}</a>
+                                @endif
+                            @endforeach
+                        @endif
                     </div>
                 </li>
             @endforeach

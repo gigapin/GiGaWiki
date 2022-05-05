@@ -42,9 +42,10 @@ class ProjectController extends GigawikiController
     /**
      * Show the form for creating a new resource.
      *
-     * @return Factory|Application|View
+     * @return void
+     * @throws \Exception
      */
-    public function create(): View|Factory|Application
+    public function create()
     {
         $this->authorize('create', Project::class);
 

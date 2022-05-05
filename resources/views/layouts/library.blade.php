@@ -24,8 +24,8 @@
     </head>
     <body class="antialiased">
     
-        <div class="container mx-auto mt-4 w-11/12 flex justify-between text-lg text-gray-300">
-            <div>Powered by GiGawiki</div>
+        <div class="container mx-auto mt-4 w-11/12 lg:w-10/12 xl:w-9/12 flex justify-between text-lg text-gray-300">
+            <div class="max-h-10 max-w-md"><img src="{{ asset('images/GiGaWiki-logo-web.png') }}" alt="" class="h-auto w-48"></div>
             <div>
                 <a href="{{ route('library') }}" class="text-gray-300 no-underline">Home</a>
                 <a href="{{ route('login') }}" class="text-gray-300 no-underline">Login</a>

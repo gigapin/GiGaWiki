@@ -17,6 +17,7 @@ class DocumentController extends Controller
      */
     public function index(string $slug)
     {
+        
         $project = Project::where('slug', $slug)->first();
         $subject = Subject::where('id', $project->subject_id)->first();
         $sections = Section::where('project_id', $project->id)->where('visibility', 1)->get();

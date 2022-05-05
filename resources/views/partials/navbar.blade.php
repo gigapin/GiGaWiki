@@ -18,8 +18,14 @@
 
             <div class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
                 <div class="flex-shrink-0 flex items-center text-white text-2xl">
-                    <img class="block lg:hidden h-8 w-auto" src="{{ asset('images/logo-150x150.png') }}" alt="Workflow">
-                    <a href="{{ route('library') }}" target="_blank"><img class="hidden lg:block h-8 w-auto" src="{{ asset('images/logo-150x150.png') }}" alt="Workflow"> GiGaWiki</a>
+                    {{-- <img class="block lg:hidden h-8 w-auto" src="{{ asset('images/logo-150x150.png') }}" alt="Workflow"> --}}
+                    
+                    <div class="max-h-10 max-w-md">
+                        <a href="{{ route('library') }}" target="_blank">
+                            <img src="{{ asset('images/GiGaWiki-logo-web.png') }}" alt="" class="h-auto w-48">
+                        </a>
+                    </div>
+       
                 </div>
                 <div class="hidden sm:block sm:ml-6">
                     <div class="flex space-x-4">
