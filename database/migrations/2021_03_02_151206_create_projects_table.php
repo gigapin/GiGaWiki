@@ -17,7 +17,7 @@ class CreateProjectsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('subject_id');
-            $table->string('name', 200)->unique();
+            $table->string('name', 190)->unique();
             $table->string('slug');
             $table->text('description')->nullable();
             $table->unsignedBigInteger('image_id')->nullable();

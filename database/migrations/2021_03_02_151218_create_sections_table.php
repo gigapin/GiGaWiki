@@ -16,7 +16,7 @@ class CreateSectionsTable extends Migration
         Schema::create('sections', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('project_id');
-            $table->string('title', 200);
+            $table->string('title', 190);
             $table->string('slug');
             $table->text('description')->nullable();
             $table->tinyInteger('visibility')->default(1);

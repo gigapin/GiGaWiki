@@ -21,11 +21,6 @@ class CreateSettingsTable extends Migration
 
         });
 
-        // 'allow-public-access',
-        // 'disable-comments',
-        // 'enable-registration',
-        // 'email-confirmation'
-
         DB::table('settings')->insert([
             ['key' => 'allow-public-access', 'value' => 'true'],
             ['key' => 'disable-comments', 'value' => 'false'],
