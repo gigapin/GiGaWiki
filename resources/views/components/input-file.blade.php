@@ -32,7 +32,7 @@
         >
             <i class="bi bi-cloud-arrow-up-fill"></i>
             <span class="mt-2 text-base leading-normal">{{ $label }}</span>
-            <input type="file" name="{{ $name }}" class="hidden" />
+            <input type="file" name="{{ $name }}" class="hidden" value="{{ old($name) }}"/>
         </label>
     </div>
 </div>

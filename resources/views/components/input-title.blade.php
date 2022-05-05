@@ -20,7 +20,9 @@
           w-full
             "
         @isset ($value)
-        value='{{ $value }}'
+            value='{{ $value }}'
+        @else
+            value="{{ old($name) }}"
         @endisset
     />
 </div>

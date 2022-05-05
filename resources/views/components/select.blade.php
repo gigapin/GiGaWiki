@@ -6,5 +6,5 @@
     </select>
 </label>
 @error($name)
-<p class="text-red-500 text-sm">{{ $message }}</p>
+    <p class="text-red-500 text-sm">{{ $message }}</p>
 @enderror
