@@ -10,8 +10,6 @@ class HomeController extends Controller
 {
     public function index()
     {
-        echo "Hello GiGa World";
-        dd();
         $subjects = Subject::where('visibility', 1)->get();
         $projects = Project::where('visibility', 1)->get();
         $subject = collect($subjects);
