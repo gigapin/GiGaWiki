@@ -24,9 +24,9 @@ class CreateRolesTable extends Migration
         });
 
         DB::table('roles')->insert([
-            ['name' => 'admin', 'slug' => 'admin', 'description' => 'Administrator of the whole application.'],
-            ['name' => 'editor', 'slug' => 'editor', 'description' => 'User can edit projects, sections and pages.'],
-            ['name' => 'guest', 'slug' => 'guest', 'description' => 'User can view projects & their content behind authentication.']
+            ['id' => 1, 'name' => 'admin', 'slug' => 'admin', 'description' => 'Administrator of the whole application.'],
+            ['id' => 2, 'name' => 'editor', 'slug' => 'editor', 'description' => 'User can edit projects, sections and pages.'],
+            ['id' => 3, 'name' => 'guest', 'slug' => 'guest', 'description' => 'User can view projects & their content behind authentication.']
         ]);
     }
 
