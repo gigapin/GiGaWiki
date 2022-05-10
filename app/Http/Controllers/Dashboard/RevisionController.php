@@ -64,7 +64,8 @@ class RevisionController extends GiGaWikiController
             'revision' => Revision::showRevisionButton($page->slug),
             'favorite' => Favorite::where('page_id', $page_id)->where('user_id', Auth::id())->where('page_type', 'page')->first(),
             'url' => 'pages',
-            'displayComments' => $this->displayComments()
+            'displayComments' => $this->displayComments(),
+            'user' => User::loggedUser(),
         ]);
     }
 
