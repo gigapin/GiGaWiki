@@ -1,4 +1,5 @@
-<footer class="md:col-span-2">
+<footer class="md:h-12">
+    {{-- md:col-span-2 --}}
     @if ($prev !== null || $next != null)
             <div class="bg-white shadow-2xl rounded p-3 mt-6 md:mx-auto 2xl:w-full">
                 <div class="flex justify-between">

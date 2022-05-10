@@ -38,6 +38,7 @@ class DocumentController extends Controller
         } else {
             $prev = null;
             $next = $doc->setNextPaginate($doc->getPage($doc->slug));
+            $description = false;
         }
 
         return view('documents.index', [

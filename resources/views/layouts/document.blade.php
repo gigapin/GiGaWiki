@@ -26,14 +26,10 @@
             #menux {
                 overflow-y: scroll;
             }
-
-            main {
-                max-height: auto;
-            }
         </style>
     </head>
     <body class="antialiased" id="document-bg">
-        <div class="w-full my-4 flex justify-between text-lg text-gray-300">
+        <div class="w-full my-4 px-2 lg:px-4 flex justify-between text-lg text-gray-300">
             <div class="max-h-10 max-w-md"><img src="{{ asset('images/GiGaWiki-logo-web.png') }}" alt="" class="h-auto w-48"></div>
 
             <div class="pr-4">
@@ -42,8 +38,8 @@
             </div>
         </div>
          
-        <main class="min-h-screen md:grid md:grid-rows-3 md:grid-flow-col md:gap-4">
-            {{--  --}}
+        <main class="min-h-screen md:flex">
+            {{-- md:grid md:grid-flow-col md:gap-4 md:grid-rows-3 --}}
             
             <div class="h-12 w-full md:hidden bg-gray-200">
                 <button id="show-sidebar" class="w-12 h-12 bg-green-500 float-right">
@@ -52,11 +48,9 @@
             </div>
 
             {{ $slot }}
-
-            
+   
         </main>
         
-
         <script src="{{ asset('js/main.js') }}"></script>
     </body>
 </html>

@@ -1,7 +1,7 @@
-<sidebar class="hidden w-10/12 md:block md:row-span-3 bg-gray-300 max-h-screen p-4" id="menux">
-    
+<sidebar class="hidden w-10/12 md:block md:flex-none md:w-52 lg:w-72 xl:w-80 2xl:w-96 bg-gray-300 min-h-screen p-4 md:p-2 lg:p-3 2xl:p-4" id="menux">
+    {{-- md:row-span-3 --}}
     <a href="{{ route('document', $project->slug) }}" class="text-xl md:text-2xl font-extrabold text-gray-800">{{ $project->name }}</a>
-    <ul class="list-none">
+    <ul class="list-none md:p-1 md:ml-1">
         @foreach($sections as $section)
             <li>
                 <div class="bg-gray-200 py-1 px-2 mb-0">

@@ -140,7 +140,7 @@ function toggleMenuDocument()
     const sidebar = document.getElementById('menux');
     const doc = document.getElementById('doc-section');
     const footer = document.getElementById('doc-footer');
-
+    
     if (sidebar !== null) {
        
         btn.addEventListener('click', function() {

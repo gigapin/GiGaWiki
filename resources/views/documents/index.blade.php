@@ -2,7 +2,8 @@
 
     @include('partials.sidebar')
 
-    <section class="md:col-span-2 md:row-span-2 bg-gray-50 py-4 px-6" id="doc-section">
+    <section class="md:flex-grow bg-gray-50 py-4 px-6" id="doc-section">
+        {{-- md:col-span-2 md:row-span-2 --}}
         @if($description)
             <h2>{{ $project->name }}</h2>
             {!! $project->description !!}
