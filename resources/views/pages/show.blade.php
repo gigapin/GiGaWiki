@@ -1,7 +1,7 @@
 <x-app-layout>
 
     <x-actions-bar :filter="'true'">
-        <div class="w-1/3 md:w-full md:text-left pb-0 mb-0 mt-0">
+        <div class="w-full md:text-left pb-0 mb-0 mt-0">
             <p class="font-semibold text-xl mt-0">Project Navigation</p>
             <div class="border-l-4 border-red-600 px-2">
                 <p class="text-gray-600 font-semibold text-lg">{{ $project->name }}</p>

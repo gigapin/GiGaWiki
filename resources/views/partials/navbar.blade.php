@@ -20,7 +20,7 @@
                 <div class="flex-shrink-0 flex items-center text-white text-2xl">
                     {{-- <img class="block lg:hidden h-8 w-auto" src="{{ asset('images/logo-150x150.png') }}" alt="Workflow"> --}}
                     
-                    <div class="hidden md:max-h-10 md:max-w-md">
+                    <div class="hidden md:block md:max-h-10 md:max-w-md">
                         <a href="{{ route('library') }}" target="_blank">
                             <img src="{{ asset('images/GiGaWiki-logo-web.png') }}" alt="" class="h-auto w-48">
                         </a>
@@ -29,11 +29,11 @@
                 </div>
                 <div class="hidden sm:block sm:ml-6">
                     <div class="flex space-x-4">
-                        <a href="{{ route('home') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium hover:no-underline">Home</a>
-                        <a href="{{ route('dashboard') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium hover:no-underline">Dashboard</a>  
-                        <a href="{{ route('subjects.index') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium hover:no-underline">Subjects</a>         
-                        <a href="{{ route('projects.index') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium hover:no-underline">Projects</a>
-                        <a href="{{ route('tags.index') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Tags</a>
+                        <a href="{{ route('home') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-md font-medium hover:no-underline">Home</a>
+                        <a href="{{ route('dashboard') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-md font-medium hover:no-underline">Dashboard</a>  
+                        <a href="{{ route('subjects.index') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-md font-medium hover:no-underline">Subjects</a>         
+                        <a href="{{ route('projects.index') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-md font-medium hover:no-underline">Projects</a>
+                        <a href="{{ route('tags.index') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-md font-medium hover:no-underline">Tags</a>
                     </div>
                 </div>
             </div>
@@ -80,7 +80,7 @@
     <div class="sm:hidden" id="mobile-menu">
         <div id="menu-mobile" class="px-2 pt-2 pb-3 space-y-1">
             <a href="{{ route('home') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Home</a>
-            <a href="{{ route('dashboard') }}" class="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium" aria-current="page">Dashboard</a>
+            <a href="{{ route('dashboard') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Dashboard</a>
             <a href="{{ route('subjects.index') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Subjects</a>
             <a href="{{ route('projects.index') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Projects</a>
             <a href="{{ route('tags.index') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Tags</a>

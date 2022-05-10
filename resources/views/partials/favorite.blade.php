@@ -3,7 +3,7 @@
         <form action="{{ route('favorites.delete', $favorite->id) }}" method="post">
             @csrf
             @method('DELETE')
-            <i class="bi bi-star-fill icons"></i>
+            <i class="bi bi-star-fill icons border-gray-800"></i>
             <button type="submit" class="text-xs md:text-sm xl:text-base h-12">Unfavorite</button>
         </form>
     @else
@@ -11,7 +11,7 @@
             @csrf
             <input type="hidden" name="page_type" value="{{ $url }}">
             <input type="hidden" name="page_id" value="{{ $slug->id }}">
-            <i class="bi bi-star icons"></i>
+            <i class="bi bi-star border-2 border-gray-600 radius-xl px-0.5 text-md"></i>
             <button type="submit" class="text-xs md:text-sm xl:text-base h-12">Favorite</button>
         </form>
     @endif
