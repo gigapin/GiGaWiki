@@ -13,7 +13,7 @@
         <x-breadcrumb route="{{ route('projects.show', $slug->project->slug) }}" project="{{ $slug->project->name }}" link="{{ route('sections.show', [$slug->slug, $slug->slug]) }}" name="{{ $slug->title }}" />
 
         <div class="py-4">
-            <x-header-main-block title="{{ $slug->title }}">
+            <x-header-main-block title="{{ $slug->title }}" description="{{ $slug->description }}">
                 @if ($slug->description !== null)
                     <div class="text-sm text-gray-700 my-4 px-4">
                         {!! $slug->description !!}

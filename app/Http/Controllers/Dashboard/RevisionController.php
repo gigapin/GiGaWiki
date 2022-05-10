@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\GigawikiController;
 use App\Models\Comment;
 use App\Models\Favorite;
 use App\Models\Page;
@@ -11,7 +11,7 @@ use App\Models\Project;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
-class RevisionController extends Controller
+class RevisionController extends GiGaWikiController
 {
     
     /**
@@ -63,7 +63,8 @@ class RevisionController extends Controller
             'parents' => Comment::getParentComments($page),
             'revision' => Revision::showRevisionButton($page->slug),
             'favorite' => Favorite::where('page_id', $page_id)->where('user_id', Auth::id())->where('page_type', 'page')->first(),
-            'url' => 'pages'
+            'url' => 'pages',
+            'displayComments' => $this->displayComments()
         ]);
     }
 

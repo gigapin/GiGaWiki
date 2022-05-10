@@ -248,10 +248,12 @@ class SettingController extends Controller
 
     public function forceCleanupImages()
     {
-        $directory = '/uploads/' . Auth::id();
+        $directory = storage_path('app/public/uploads/' . Auth::id());
         $files = Storage::files($directory);
         foreach($files as $file) {
-            unlink(storage_path('app/public/') . $file);
+            if ($directory . "/" . $file) {
+                unlink($directory . "/" . $file);
+            }
         }
 
         return view('settings.maintenance');

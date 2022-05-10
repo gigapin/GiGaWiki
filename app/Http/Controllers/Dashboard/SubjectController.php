@@ -31,9 +31,7 @@ class SubjectController extends GigawikiController
      * @return Application|Factory|View
      */
     public function index()
-    {
-        // $subject = Subject::find(1);
-        
+    {   
         return view('subjects.index', [
             'bodies' => Subject::latest()->paginate(env('APP_PAGE')),
             'activities' => $this->getActivity()->setActivity('subject'),

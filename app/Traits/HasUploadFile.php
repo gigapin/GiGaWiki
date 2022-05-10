@@ -15,6 +15,17 @@ use Illuminate\Support\Str;
 trait HasUploadFile
 {
 
+    private string $storagePath = "uploads/";
+
+    public function setStoragePath(string $storagePath)
+    {
+        $this->storagePath = $storagePath;
+    }
+
+    public function getStoragePath(): string
+    {
+        return $this->storagePath;
+    }
 
     /**
      * @return string
@@ -29,7 +40,6 @@ trait HasUploadFile
      */
     public function renderDom(string $request): bool|string
     {
-        ob_clean();
         $dom = new \DomDocument();
         $dom->encoding = "UTF-8";
         $dom->loadHtml($request, LIBXML_HTML_NODEFDTD); //, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD
@@ -48,12 +58,14 @@ trait HasUploadFile
                 list(, $data) = explode(',', $data);
                 // Decode base64
                 $dataDecode = base64_decode($data);
-                $dir = storage_path('uploads/' . Auth::id());
+                
+                $dir = $this->getStoragePath() . Auth::id();
                 // Storing image.
-                if ( ! is_dir($dir)) {
+                if ( ! is_dir(storage_path('app/public/' . $dir))) {
                     Storage::makeDirectory($dir);
                 }
-                $path = storage_path('app/public/uploads/' . Auth::id() . '/' . $name . '.' . $extension[1]);
+                $path = storage_path('app/public/' . $dir) . '/' . $name . '.' . $extension[1];
+                
                 file_put_contents($path, $dataDecode);
                 // Remove old src attribute.
                 $img->removeAttribute('src');
@@ -64,7 +76,7 @@ trait HasUploadFile
                 Image::create([
                     'name' => $name,
                     'url' => $srcPath,
-                    'path' => 'uploads/' . Auth::id() . '/' . $name . '.' . $extension[1],
+                    'path' => $this->getStoragePath() . Auth::id() . "/" . $name . '.' . $extension[1],
                     'type' => 'post',
                     'created_by' => Auth::id(),
                     'updated_by' => Auth::id(),
@@ -86,11 +98,11 @@ trait HasUploadFile
     {
         $file = request()->file($fileName);
         $name = $file->hashName();
-        $dir = storage_path('uploads/' . Auth::id());
+        $dir = $this->getStoragePath() . Auth::id();
         if (! is_dir($dir)) {
             Storage::makeDirectory($dir);
         }
-        $file->storeAs("/uploads/" . Auth::id(), $name);
+        $file->storeAs($this->getStoragePath() . Auth::id(), $name, 'public');
         
         return $name;
     }
@@ -125,7 +137,7 @@ trait HasUploadFile
             if($image !== null) {
                 if(file_exists(storage_path('app/public/' . $image->path))) { 
                     $image->delete();
-                    Storage::delete($image->path);
+                    Storage::disk('public')->delete($image->path);
                 }
             }
         }
@@ -142,7 +154,12 @@ trait HasUploadFile
      */
     public function getImageFeatured(int $id, string $model): string
     {
-        $default_image = env('DEFAULT_IMAGE');
+        if (env('DEFAULT_iMAGE') !== null) {
+            $default_image = env('DEFAULT_IMAGE');
+        } else {
+            $default_image = "";
+        }
+       
         $class = "App\Models\\$model";
         $image_id = $class::find($id);
 
@@ -156,7 +173,7 @@ trait HasUploadFile
                 }
             }
         }
-
+        
         return $default_image;
     }
 

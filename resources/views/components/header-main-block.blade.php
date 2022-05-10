@@ -1,5 +1,5 @@
-@if($description !== null)
-    <span class="text-2xl font-bold md:text-3xl xl:text-4xl">{{ $title }}
+@if($description !== "")
+    <span class="text-2xl md:text-3xl xl:text-4xl font-bold">{{ $title }}
         @include('partials.showDescription')
     </span>
 
