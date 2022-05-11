@@ -1,124 +1,125 @@
-function comments() {
-    const comment = document.getElementById('form-comment');
-    const btnComment = document.getElementById('add-comment');
-    const areaComment = document.getElementById('area-comment');
-    const btnShowComment = document.getElementById('show-comment');
-    if(btnComment !== null) {
-        btnComment.addEventListener('click', function() {
-            comment.classList.toggle('hidden');
+const Selectors = {
+    'addComment' :  document.querySelector('#add-comment'),
+    'showComment' : document.querySelector('#show-comment'),
+    'firstBox' : document.querySelector('#first-box'),
+    'mainBox' : document.querySelector('#main-box'),
+    'userMenuButton' : document.querySelector('#user-menu-button'),
+    'btnMenu' : document.querySelector('#btn-menu'),
+    'checkboxUserInvitation' : document.querySelector('#checkbox-user-invititation'),
+    'btnInputFile' : document.querySelector('#btn-input-file'),
+    'btnInputTag' : document.querySelector('#btn-input-tag'),
+    'showSidebar' : document.querySelector('#show-sidebar')
+};
 
-        });
-    }
-    if(btnShowComment !== null) {
-        btnShowComment.addEventListener('click', function() {
-            areaComment.classList.toggle('hidden');
-        });
-    }
+if (Selectors.addComment !== null) {
+    Selectors.addComment.addEventListener('click', addCommentFn);
 }
 
-function hiddenUserPassword()
-{
-    const pass = document.getElementById('create-user-password');
-    const check = document.getElementById('checkbox-user-invititation');
-    if (pass !== null) {
-        pass.style.display = "block";
-    }
-    
-    if(check !== null) {
-        check.addEventListener('change', (evt) => {
-            if(evt.currentTarget.checked) {
-                pass.style.display = "none";
-            } else {
-                pass.style.display = "block";
-            }
-        });
-    }
-    
+if (Selectors.showComment !== null) {
+    Selectors.showComment.addEventListener('click', showCommentFn);
+}
+
+if (Selectors.checkboxUserInvitation !== null) {
+    Selectors.checkboxUserInvitation.addEventListener('change', hiddenUserPassword);
+}
+
+if (Selectors.btnInputFile !== null) {
+    Selectors.btnInputFile.addEventListener('click', toggleInputFile);
+}
+
+if (Selectors.btnInputTag !== null) {
+    Selectors.btnInputTag.addEventListener('click', toggleInputTag);
+}
+
+if (Selectors.showSidebar !== null) {
+    Selectors.showSidebar.addEventListener('click', toggleMenuDocument);
+}
+
+if (Selectors.userMenuButton !== null) {
+    Selectors.userMenuButton.addEventListener('click', toggleProfile);
+}
+
+if (Selectors.btnMenu !== null) {
+    Selectors.btnMenu.addEventListener('click', toggleHamburger);
+}
+
+function addCommentFn() {
+    return toggleHidden('form-comment');
+}
+
+function showCommentFn() {
+    return toggleHidden('area-comment');
 }
 
 function updateComment(id) {
-    document.getElementById('edit-comment-' + id).classList.toggle('hidden');
-    document.getElementById('body-comment-' + id).className = 'hidden';
+    if (id !== undefined) {
+        document.getElementById('edit-comment-' + id).classList.toggle('hidden');
+        document.getElementById('body-comment-' + id).className = 'hidden';
+    }   
 }
 
 function replyComment(id) {
-    document.getElementById('form-reply-comment-' + id).classList.toggle('hidden');
+    if (id !== undefined) {
+        document.getElementById('form-reply-comment-' + id).classList.toggle('hidden');
+    }
 }
 
 function showDescription() {
-    document.getElementById('description-area').classList.toggle('hidden');
+    return toggleHidden('description-area');
 }
 
 function sxFunc() {
-    document.getElementById('first-box').classList.add('block');
-    document.getElementById('first-box').classList.remove('hidden');
-    document.getElementById('main-box').classList.add('hidden');
+    Selectors.firstBox.classList.add('block');
+    Selectors.firstBox.classList.remove('hidden');
+    Selectors.mainBox.classList.add('hidden');
 }
 
 function dxFunc() {
-    document.getElementById('main-box').classList.add('block');
-    document.getElementById('main-box').classList.remove('hidden');
-    document.getElementById('first-box').classList.add('hidden');
+    Selectors.mainBox.classList.add('block');
+    Selectors.mainBox.classList.remove('hidden');
+    Selectors.firstBox.classList.add('hidden');
+}
+
+function hiddenUserPassword(evt)
+{
+    const pass = document.getElementById('create-user-password');
+    if (pass !== null) {
+        pass.style.display = "block";
+    }
+    if(evt.currentTarget.checked) {
+        pass.style.display = "none";
+    } else {
+        pass.style.display = "block";
+    }
+}
+
+function toggleHidden(name) {
+    const getName = document.getElementById(name);
+    if (getName !== null) {
+        getName.classList.toggle('hidden');
+    }
 }
 
 // Open Profile menu
 function toggleProfile()
 {
-    const btn = document.getElementById('user-menu-button');
-    const windowProfile = document.getElementById('window-profile');
-    if(windowProfile !== null) {
-        windowProfile.style.display = 'none';
-        btn.addEventListener('click', function() {
-            if (windowProfile.style.display === 'none') {
-                windowProfile.style.display = 'block';
-            } else {
-                windowProfile.style.display = 'none';
-            }
-    
-        });
-    }
-    
+    toggleHidden('window-profile'); 
 }
 
 // Toggle mobile menu
 function toggleHamburger()
 {
-    const btn = document.getElementById('btn-menu');
-    const menuMobile = document.getElementById('menu-mobile');
-    if (menuMobile !== null) {
-        menuMobile.style.display = 'none';
-        btn.addEventListener('click', function() {
-            if (menuMobile.style.display === 'none') {
-                menuMobile.style.display = 'block';
-            } else {
-                menuMobile.style.display = 'none';
-            }
-        });
-    }
-   
+    toggleHidden('menu-mobile'); 
 }
 
 function toggleInputFile()
 {
-    const btn = document.getElementById('btn-input-file');
-    const area = document.getElementById('input-file');
-    if (btn !== null) {
-        btn.addEventListener('click', function() {
-            area.classList.toggle('hidden');
-        });
-    }
-
+    toggleHidden('input-file');
 }
 
 function toggleInputTag()
 {
-    const btnInputTag = document.getElementById('btn-input-tag');
-    const areaTags = document.getElementById('area-tags');
-    if (btnInputTag !== null) {
-        btnInputTag.addEventListener('click', function() {
-            areaTags.classList.toggle('hidden');
-        });
-    }
+    toggleHidden('area-tags');
 }
 
 function appendTag()
@@ -136,37 +137,24 @@ function appendTag()
 
 function toggleMenuDocument()
 {
-    const btn = document.getElementById('show-sidebar');
     const sidebar = document.getElementById('menux');
     const doc = document.getElementById('doc-section');
     const footer = document.getElementById('doc-footer');
     
     if (sidebar !== null) {
-       
-        btn.addEventListener('click', function() {
-            sidebar.classList.toggle('hidden');
-            if(sidebar.classList.contains('hidden')) {
-                sidebar.style.display = "none";
-                doc.classList.remove('hidden');
-                footer.classList.remove('hidden');
-            } else {
-                sidebar.classList.remove('hidden');
-                sidebar.style.display = "block";
-                doc.classList.add('hidden');
-                footer.classList.add('hidden');
-            }
-        });
+        sidebar.classList.toggle('hidden');
+        if(sidebar.classList.contains('hidden')) {
+            sidebar.style.display = "none";
+            doc.classList.remove('hidden');
+            footer.classList.remove('hidden');
+        } else {
+            sidebar.classList.remove('hidden');
+            sidebar.style.display = "block";
+            doc.classList.add('hidden');
+            footer.classList.add('hidden');
+        }
     }
    
 }
 
-window.onload = function() {
-    toggleProfile();
-    toggleHamburger();
-    toggleInputFile();
-    toggleInputTag();
-    comments();
-    hiddenUserPassword();
-    toggleMenuDocument();
-};
 

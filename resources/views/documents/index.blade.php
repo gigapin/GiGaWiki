@@ -16,6 +16,7 @@
                     <h2>{{ $doc->title }}</h2>
                     {!! $doc->content !!}
                 @endif  
+                
             </div>
             @include('partials.footer')
         </div>
