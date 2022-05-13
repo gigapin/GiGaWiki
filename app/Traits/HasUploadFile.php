@@ -101,7 +101,7 @@ trait HasUploadFile
         $dir = $this->getStoragePath() . Auth::id();
         if (! is_dir($dir)) {
             Storage::makeDirectory($dir);
-        }
+        } 
         $file->storeAs($this->getStoragePath() . Auth::id(), $name, 'public');
         
         return $name;
@@ -130,7 +130,7 @@ trait HasUploadFile
      * @param int|null $image_id
      * @return Image
      */
-    public function updateImageFeatured(string $image_name, int $image_id = null)
+    public function updateImageFeatured(string $image_name, int $image_id = null, string $type = 'cover')
     {
         if($image_id !== null) {
             $image = Image::find($image_id);
@@ -142,7 +142,7 @@ trait HasUploadFile
             }
         }
 
-        return $this->saveImageFeatured($image_name);
+        return $this->saveImageFeatured($image_name, $type);
     }
 
 

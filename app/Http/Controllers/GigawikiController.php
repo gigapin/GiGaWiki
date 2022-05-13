@@ -29,8 +29,7 @@ class GigawikiController extends Controller
     {
         $setting = Setting::where('key', 'disable-comments')->first();
         
-        return $setting->value === 'false' ? 'false' : 'true';
-        
+        return $setting->value === 'false' ? 'false' : 'true';  
     }
 
 

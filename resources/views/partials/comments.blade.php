@@ -33,7 +33,7 @@
                             <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
                         </svg>
                         <div class="text-gray-600">
-                            {{ $user->name }} commented  {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $comment->updated_at)->diffForHumans() }}
+                            {{ $comment->user->name }} commented  {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $comment->updated_at)->diffForHumans() }}
                         </div>
                     </div>
 
@@ -101,7 +101,7 @@
                                         <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
                                     </svg>
                                     <div class="text-gray-600">
-                                        {{ $user->name }} commented  {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $parent->updated_at)->diffForHumans() }}
+                                        {{ $parent->user->name }} commented  {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $parent->updated_at)->diffForHumans() }}
                                     </div>
                                 </div>
                                 <div class="mt-4" id="body-comment-{{ $parent->id }}">
@@ -115,7 +115,7 @@
 
             <!-- Reply Comment -->
             <div id="form-reply-comment-{{ $comment->id }}" class="mt-6 w-11/12 mx-auto hidden lg:ml-12">
-                <p class="bg-green-200 text-sm p-1 text-gray-500">In reply to comment by {{ $user->name }}</p>
+                <p class="bg-green-200 text-sm p-1 text-gray-500">In reply to comment by {{ $comment->user->name }}</p>
                 <form action="{{ route('comments.reply', [$url, $slug->slug, $comment->id]) }}" method="POST">
                     @csrf
                     <textarea name="body" id="" class="w-full h-50 border-gray-300 text-xs lg:text-sm"></textarea>

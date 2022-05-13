@@ -31,7 +31,7 @@
 
     @include('partials.navbar')
 
-    <div class="flex justify-around bg-gray-500 mt-0 mb-4 pt-20 pb-4 text-gray-200 border-t-2 border-b-2 border-gray-800 lg:hidden">
+    <div class="flex justify-around bg-gray-500 mt-0 mb-4 pt-20 pb-4 text-gray-200 border-t-2 border-b-2 border-gray-800 xl:hidden">
         <div class="w-1/2 text-center border-r-2 border-gray-800">
             <button onclick="sxFunc()" class="hover:text-white">Info</button>
         </div>
@@ -40,7 +40,7 @@
         </div>
     </div>
 
-    <div class="py-20 lg:grid lg:grid-cols-4 lg:grid-rows-7 lg:gap:2 2xl:gap-0 2xl:flex">
+    <div class="py-20 xl:grid xl:grid-cols-4 xl:grid-rows-7 xl:gap:2 2xl:gap-0 2xl:flex">
         {{ $slot }}
     </div>
 

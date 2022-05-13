@@ -1,4 +1,4 @@
-<div class="absolute top-36 flex flex-justify-between w-full z-0 lg:static lg:block lg:row-start-1 lg:ml-4 xl:w-72 2xl:ml-0 lg:mb-4 2xl:w-80" id="last-box">
+<div class="absolute top-36 flex flex-justify-between w-full z-0 xl:static xl:block xl:row-start-1 xl:ml-4 xl:w-72 2xl:ml-0 xl:mb-4 2xl:w-80" id="last-box">
 
     {{-- Add Button--}}
     @if ($new !== null && $page !== null)

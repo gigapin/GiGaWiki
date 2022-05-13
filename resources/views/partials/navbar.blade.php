@@ -20,9 +20,14 @@
                 <div class="flex-shrink-0 flex items-center text-white text-2xl">
                     {{-- <img class="block lg:hidden h-8 w-auto" src="{{ asset('images/logo-150x150.png') }}" alt="Workflow"> --}}
                     
-                    <div class="hidden md:block md:max-h-10 md:max-w-md">
+                    <div class="hidden xl:block md:max-h-10 md:max-w-md">
                         <a href="{{ route('library') }}" target="_blank">
                             <img src="{{ asset('images/GiGaWiki-logo-web.png') }}" alt="" class="h-auto w-48">
+                        </a>
+                    </div>
+                    <div class="block xl:hidden">
+                        <a href="{{ route('library') }}" target="_blank">
+                            <img src="{{ asset('images/GiGaWikiOnlyLogo.png') }}" alt="" class="max-h-12">
                         </a>
                     </div>
        

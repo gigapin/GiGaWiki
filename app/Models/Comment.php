@@ -18,6 +18,11 @@ class Comment extends Model
         'parent_id'
     ];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public static function hasParent()
     {
         $comments = Comment::all();

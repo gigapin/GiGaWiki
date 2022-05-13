@@ -127,7 +127,8 @@ class SettingController extends Controller
         $this->authorize('viewAny', Setting::class);
         
         return view('settings.users', [
-            'users' => User::all(),    
+            'users' => User::all(),  
+            'avatars' => Image::where('type', 'avatar')->get()  
         ]);
     }
 
@@ -152,7 +153,8 @@ class SettingController extends Controller
         return view('settings.edit-user', [
             'user' => $user, 
             'role' => $role,
-            'showUploadAvatar' => $showUploadAvatar
+            'showUploadAvatar' => $showUploadAvatar,
+            'avatar' => Image::where('type', 'avatar')->where('id', $user->image_id)->first()
         ]);
     }
 
@@ -176,9 +178,9 @@ class SettingController extends Controller
         }
         
         $data['slug'] = Str::slug($request->name);
-        if ($request->hasFile('featured')) {
+        if ($request->hasFile('featured') && $request->file('featured')->isValid()) {
             $this->renderFeatured('featured');
-            $data['image_id'] = $this->saveImageFeatured('featured', 'avatar')->id;
+            $data['image_id'] = $this->updateImageFeatured('featured', $user->image_id, 'avatar')->id;
         }
         $userUpdated = User::findOrFail($user->id);
         $userUpdated->update($data);

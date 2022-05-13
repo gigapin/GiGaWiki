@@ -52,8 +52,8 @@
 
             <div class="py-6 border-b border-gray-300">
                 <h3>Edit Avatar</h3>
-                @if ($user->image_id !== null)
-                    <img src="{{ asset($user->image->url) }}" alt="" />
+                @if ($avatar !== null)
+                    <img src="{{ asset($avatar->url) }}" alt="" width="150px" height="150px" />
                 @else
                     <i class="bi bi-person-square maxi-icons"></i>
                 @endif

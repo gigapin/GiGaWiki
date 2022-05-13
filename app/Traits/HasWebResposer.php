@@ -1,9 +1,12 @@
 <?php
 namespace App\Traits;
 
+use Illuminate\Contracts\View\View;
+use Illuminate\Contracts\View\Factory;
+
 trait HasWebResposer
 {
-    protected function errorResponse($message, $code)
+    public function errorResponse($message, $code)
     {
         return view('errors.response', [
             'message' => $message,

@@ -38,9 +38,6 @@ Route::get('/document/{project}/{section}/{slug}', [DocumentController::class, '
 Route::get('document/{project}/{slug}', [DocumentController::class, 'section'])->name('document.section');
 
 
-
-
-
 require __DIR__.'/auth.php';
 
 Route::get('/register/{id}/{role_id}', [UserInvitedRegisterController::class, 'create'])
