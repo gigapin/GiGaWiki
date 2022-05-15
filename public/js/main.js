@@ -8,7 +8,7 @@ const Selectors = {
     'checkboxUserInvitation' : document.querySelector('#checkbox-user-invititation'),
     'btnInputFile' : document.querySelector('#btn-input-file'),
     'btnInputTag' : document.querySelector('#btn-input-tag'),
-    'showSidebar' : document.querySelector('#show-sidebar')
+    'showSidebar' : document.querySelector('#show-sidebar'),
 };
 
 if (Selectors.addComment !== null) {
@@ -156,5 +156,6 @@ function toggleMenuDocument()
     }
    
 }
+
 
 

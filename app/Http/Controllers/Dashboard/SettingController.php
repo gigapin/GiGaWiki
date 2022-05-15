@@ -286,8 +286,8 @@ class SettingController extends Controller
     }
 
     /**
-     * @return [type]
-     */
+     * @return Redirect
+     */ 
     public function emptyRecycleBin()
     {
         Page::onlyTrashed()->forceDelete();
