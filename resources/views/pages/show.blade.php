@@ -94,7 +94,3 @@
 </x-app-layout>
 
 
-<script>
-    const xhr = new XMLHttpRequest();
-    xhr.open({{ route('pages.show') }})
-</script>
