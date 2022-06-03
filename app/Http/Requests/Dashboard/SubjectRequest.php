@@ -25,14 +25,26 @@ class SubjectRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'name' => [
-                'required',
-                'max:50',
-                //Rule::unique('subjects', 'name')->ignore($user)
-                ],
-            'description' => 'nullable|max:5000',
-            'featured' => 'nullable|image'
-        ];
+      return [
+        'user_id' => ['exists:App\Models\User,id'],
+        'name' => [
+            'max:200',
+            'min:3',
+            'unique:projects',  
+            Rule::unique('subjects')
+                ->ignore($this->name, 'name')
+            ],
+        'slug' => ['string'],
+        'description' => ['nullable', 'max:5000'],
+        'featured' => [
+            'nullable', 
+            'image', 
+            Rule::dimensions()
+                ->maxWidth(1921)
+                ->minWidth(99)
+                ->maxHeight(1281)
+                ->minHeight(99)
+            ]
+    ];
     }
 }
