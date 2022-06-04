@@ -8,31 +8,27 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    public function index()
-    {
-        $subjects = Subject::where('visibility', 1)->get();
-        $projects = Project::where('visibility', 1)->get();
-        $subject = collect($subjects);
-        $project = collect($projects);
-        $slug = "";
-        foreach ($project as $row) {
-            $slug = $row->slug;
-        }
-        // dd();
-        
-        
-        switch($subject->count() > 0) {
-            case ($subject->count() > 0) && ($project->count() < 1):
-                return redirect()->route('login');
-                break;
-            case ($subject->count() > 0) && ($project->count() === 1):
-                return redirect()->route('document', $slug);
-                break;
-            case ($subject->count() > 0) && ($project->count() > 1):
-                return redirect()->route('library');
-                break;
-        }
-
-        return redirect()->route('login');
+    /**
+   * Switch document or library page.
+   *
+   * @return void
+   */
+  public function index()
+  {
+    
+    $subjects = Subject::where('visibility', 1)->get();
+    $projects = Project::where('visibility', 1)->get();
+    $subject = collect($subjects);
+    $project = collect($projects);
+    $slug = "";
+    foreach ($project as $row) {
+        $slug = $row->slug;
     }
+    
+    if (($subject->count() === 1) && $project->count() === 1) {
+      return redirect()->route('document', $slug);
+    }
+      
+    return redirect()->route('library');
+  }
 }
