@@ -103,10 +103,11 @@ class SectionController extends GigawikiController
     {
         $update = Section::getSection($slug);
         $update->update($this->getDataForm($request));
+        $section = Section::getSection($this->getDataForm($request)['slug']);
         $this->getActivity()->saveActivity('updated', $update->id, 'section', $update->title);
 
         return redirect()
-            ->route('projects.show', Section::getSection($slug)->project->slug)
+            ->route('projects.show', $section->project->slug)
             ->with('success', 'Section updated successfully');
     }
 
