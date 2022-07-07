@@ -21,7 +21,7 @@ class ImageFactory extends Factory
 
         return [
             'name' => $name,
-            'url' => 'http://' . env('APP_URL') . '/storage/uploads/' . $user->id . '/' . $name,
+            'url' => 'http://' . config('app.url') . '/storage/uploads/' . $user->id . '/' . $name,
             'path' => '/uploads/' . $user->id . '/' . $name,
             'created_by' => $user->id,
             'updated_by' => $user->id,

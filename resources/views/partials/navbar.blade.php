@@ -21,12 +21,12 @@
                     {{-- <img class="block lg:hidden h-8 w-auto" src="{{ asset('images/logo-150x150.png') }}" alt="Workflow"> --}}
                     
                     <div class="hidden xl:block md:max-h-10 md:max-w-md">
-                        <a href="{{ route('library') }}" target="_blank">
+                        <a href="{{ route('dashboard') }}" target="_blank">
                             <img src="{{ asset('images/GiGaWiki-logo-web.png') }}" alt="" class="h-auto w-48">
                         </a>
                     </div>
                     <div class="block xl:hidden">
-                        <a href="{{ route('library') }}" target="_blank">
+                        <a href="{{ route('dashboard') }}" target="_blank">
                             <img src="{{ asset('images/GiGaWikiOnlyLogo.png') }}" alt="" class="max-h-12">
                         </a>
                     </div>
@@ -34,7 +34,7 @@
                 </div>
                 <div class="hidden sm:block sm:ml-6">
                     <div class="flex space-x-4">
-                        <a href="{{ route('home') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-md font-medium hover:no-underline">Home</a>
+                        <a href="{{ route('dashboard') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-md font-medium hover:no-underline">Home</a>
                         <a href="{{ route('dashboard') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-md font-medium hover:no-underline">Dashboard</a>  
                         <a href="{{ route('subjects.index') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-md font-medium hover:no-underline">Subjects</a>         
                         <a href="{{ route('projects.index') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-md font-medium hover:no-underline">Projects</a>
@@ -84,7 +84,7 @@
     <!-- Mobile menu, show/hide based on menu state. -->
     <div class="hidden" id="mobile-menu">
         <div id="menu-mobile" class="px-2 pt-2 pb-3 space-y-1">
-            <a href="{{ route('home') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Home</a>
+            <a href="{{ route('dashboard') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Home</a>
             <a href="{{ route('dashboard') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Dashboard</a>
             <a href="{{ route('subjects.index') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Subjects</a>
             <a href="{{ route('projects.index') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Projects</a>

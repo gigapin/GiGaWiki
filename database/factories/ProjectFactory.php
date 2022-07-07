@@ -25,16 +25,17 @@ class ProjectFactory extends Factory
     public function definition(): array
     {
         //$user = User::factory()->create();
-        $subject = Subject::factory()->create();
+        
         $name = $this->faker->sentence(3, true);
 
         return [
             'user_id' => 1, //$user->id,
-            'subject_id' => $subject->id,
+            'subject_id' => $this->faker->numberBetween(1, 3),
             'name' => $name,
             'slug' => Str::slug($name),
-            'description' => $this->faker->paragraph(3, true),
-            'image_id' => NULL
+            'description' => $this->faker->text(400),
+            'image_id' => null,
+            'visibility' => 1
         ];
     }
 }

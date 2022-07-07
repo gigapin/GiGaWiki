@@ -17,7 +17,7 @@ class CreateTagsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('page_id');
             $table->string('page_type');
-            $table->string('name');
+            $table->string('name', 50);
             $table->timestamps();
         });
     }

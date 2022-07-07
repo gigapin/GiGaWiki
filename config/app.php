@@ -124,6 +124,11 @@ return [
     'cipher' => 'AES-256-CBC',
 
     /*
+    / Customizer application
+    */
+    'page' => env('APP_PAGE', 6),
+
+    /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers
     |--------------------------------------------------------------------------
@@ -177,6 +182,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\RepositoryServiceProvider::class,
 
     ],
 

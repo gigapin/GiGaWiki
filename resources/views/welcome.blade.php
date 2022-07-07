@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+        <title>Laravel & Vue</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
@@ -23,20 +23,20 @@
         </style>
     </head>
     <body class="antialiased">
-    
-        <div class="container mx-auto mt-4 w-9/12 flex justify-between text-lg text-gray-300">
-            <div>Powered by GiGawiki</div>
-            <div>Login</div>
-        </div>
-        <!-- Wrapper -->
-        <div class="container mx-auto mt-4 w-9/12 bg-green-600 p-4">
-            <p class="text-center text-2xl sm:text-4xl mb-4 pt-4 text-white font-extrabold">GiGaWiki</p>
-            <p class="text-center text-2xl sm:text-2xl mb-8  text-gray-300 font-bold">Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
 
-            <div class="grid grid-cols-3 gap-8">
-                
-            </div>
-            
+      <div id="app" >
+        <nav class="bg-indigo-500 mb-4 py-4">
+          
+        </nav>
+    
+        <div class="container mx-auto mt-4 w-9/12 text-lg text-gray-300">
+          {{-- flex justify-between --}}  
+          <h1>Welcome Page</h1>
+          
+          
         </div>
+
+      </div>
+        
     </body>
 </html>

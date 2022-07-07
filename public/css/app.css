@@ -1003,6 +1003,7 @@ code, kbd, samp, pre {
 }
 
 .sticky {
+  position: -webkit-sticky;
   position: sticky;
 }
 
@@ -32368,6 +32369,7 @@ code, kbd, samp, pre {
   }
 
   .sm\:sticky {
+    position: -webkit-sticky;
     position: sticky;
   }
 
@@ -63655,6 +63657,7 @@ code, kbd, samp, pre {
   }
 
   .md\:sticky {
+    position: -webkit-sticky;
     position: sticky;
   }
 
@@ -94942,6 +94945,7 @@ code, kbd, samp, pre {
   }
 
   .lg\:sticky {
+    position: -webkit-sticky;
     position: sticky;
   }
 
@@ -126229,6 +126233,7 @@ code, kbd, samp, pre {
   }
 
   .xl\:sticky {
+    position: -webkit-sticky;
     position: sticky;
   }
 
@@ -157516,6 +157521,7 @@ code, kbd, samp, pre {
   }
 
   .\32xl\:sticky {
+    position: -webkit-sticky;
     position: sticky;
   }
 

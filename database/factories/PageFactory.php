@@ -24,20 +24,19 @@ class PageFactory extends Factory
      */
     public function definition(): array
     {
-        $project = Project::factory()->create();
-        $section = Section::factory()->create();
+       
         $title = $this->faker->sentence(6, true);
 
         return [
             'created_by' => 1,
             'updated_by' => 1,
             'owned_by' => 1,
-            'project_id' => $project->id,
-            'section_id' => $section->id,
+            'project_id' => $this->faker->numberBetween(1, 3),
+            'section_id' => $this->faker->numberBetween(1, 6),
             'page_type' => 'page',
             'title' => $title,
             'slug' => Str::slug($title),
-            'content' => $this->faker->paragraphs(8, true),
+            'content' => $this->faker->paragraph(12, true),
             'restricted' => 0,
             'current_revision' => 0
         ];

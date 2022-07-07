@@ -2,7 +2,7 @@
 
     <div class="w-11/12 lg:w-8/12 mt-4 mx-auto bg-white rounded-md text-center">
         <p class="text-xl">{{ $page->title }}</p>
-        <p class="text-lg text-red-600">Are you sure you want delete this lecture?</p>
+        <p class="text-lg text-red-600">Are you sure you want delete this page?</p>
 
         <div class="mt-4 flex justify-center">
             <div class="py-4 mt-2 px-4">

@@ -9,8 +9,8 @@
         <form action="{{ route('subjects.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
-            <x-breadcrumb link="{{ route('subjects.index') }}" :name="'Subjects'" :value="'Save'"/>
-            
+            <x-breadcrumb link="{{ route('subjects.index') }}" :name="'Subjects'" :value="'Save'" />
+
             <x-input-title :label="'Name'" :name="'name'" />
             <x-textarea :name="'description'" />
             <x-input-file :name="'featured'" :label="'Select an image'" />
@@ -20,6 +20,6 @@
 
     </x-create-form>
 
-    <x-toolbar :link="'subjects.index'" :page="'All Subjects'" :icon="'false'"/>
+    <x-toolbar :link="'subjects.index'" :page="'All Subjects'" :icon="'false'" />
 
 </x-app-layout>

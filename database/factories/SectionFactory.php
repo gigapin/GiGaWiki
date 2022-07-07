@@ -23,14 +23,13 @@ class SectionFactory extends Factory
      */
     public function definition()
     {
-        $project = Project::factory()->create();
-        $title = $this->faker->words(2, true);
+        $title = $this->faker->words(3, true);
 
         return [
-            'project_id' => $project->id,
+            'project_id' => $this->faker->numberBetween(1, 10),
             'title' => $title,
             'slug' => Str::slug($title),
-            'description' => $this->faker->paragraph(3, true)
+            'description' => null
         ];
     }
 }

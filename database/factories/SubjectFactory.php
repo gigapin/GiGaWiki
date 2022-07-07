@@ -24,7 +24,7 @@ class SubjectFactory extends Factory
     public function definition(): array
     {
         //$user = User::factory()->create();
-        $name = $this->faker->text(30);
+        $name = $this->faker->text(20);
 
         return [
             'user_id' => 1, //$user->id,

@@ -2,15 +2,16 @@
 
 namespace Tests\Feature;
 
-use App\Models\Project;
-use App\Models\Subject;
-use App\Models\User;
-use App\Models\RoleUser;
-use App\Models\Section;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Str;
 use Tests\TestCase;
+use App\Models\Page;
+use App\Models\User;
+use App\Models\Project;
+use App\Models\Section;
+use App\Models\Subject;
+use App\Models\RoleUser;
+use Illuminate\Support\Str;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class SectionTest extends TestCase
 {
@@ -104,7 +105,7 @@ class SectionTest extends TestCase
         ]);
     }
 
-    public function test_logged_user_can_delete_project()
+    public function test_logged_user_can_delete_section()
     {
         $this->create_user(1);
         $subject = Subject::factory()->create([
@@ -117,10 +118,24 @@ class SectionTest extends TestCase
         $section = Section::factory()->create([
             'project_id' => $project->id
         ]);
+        $page = Page::factory()->create([
+            'project_id' => $project->id,
+            'section_id' => $section->id
+        ]);
+        $pg = [
+            'title' => 'The test',
+            'content' => 'Blah blah',
+            'page_type' => 'page',
+            'created_by' => $this->user->id,
+            'updated_by' => $this->user->id,
+            'owned_by' => $this->user->id,
+            'slug' => 'the-test'
+        ];
         $this->assertEquals(1, $section->count());
         $res = $this->actingAs($this->user)->delete('sections/' . $section->slug);
         $res->assertRedirect(route('projects.show', $project->slug));
         $this->assertEquals(0, $section->count());
+        $this->assertDatabaseMissing('pages', $pg);
         $res->assertSessionHas('success');
     }
 }
