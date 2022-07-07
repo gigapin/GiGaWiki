@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use App\Http\Controllers\GigawikiController;
-use App\Models\Comment;
-use App\Models\Favorite;
 use App\Models\Page;
-use App\Models\Revision;
-use App\Models\Project;
 use App\Models\User;
+use App\Models\Project;
+use App\Models\Favorite;
+use App\Models\Revision;
+use App\Actions\CommentAction;
+use App\Actions\RevisionAction;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\GigawikiController;
+use Illuminate\Http\RedirectResponse;
 
 class RevisionController extends GiGaWikiController
 {
@@ -20,9 +22,9 @@ class RevisionController extends GiGaWikiController
      * @param string $project
      * @param int $page
      * 
-     * @return Application|Factory|View
+     * @return mixed
      */
-    public function index(string $project, int $page)
+    public function index(string $project, int $page): mixed
     {
         $project = Project::where('slug', $project)->first();
         $revision = Revision::latest()->where('page_id', $page)->where('project_id', $project->id)->get();
@@ -41,9 +43,14 @@ class RevisionController extends GiGaWikiController
      * @param int $page_id
      * @param int $id
      * 
-     * @return Application|Factory|View
+     * @return mixed
      */
-    public function preview(string $project, int $page_id, int $id)
+    public function preview(
+        RevisionAction $revisionAction, 
+        CommentAction $commentAction, 
+        string $project, 
+        int $page_id, 
+        int $id): mixed
     {
         $project = Project::where('slug', $project)->first();
         $page = Page::find($page_id);
@@ -59,9 +66,9 @@ class RevisionController extends GiGaWikiController
             'project' => $page->getProjectId($page),
             'all_sections' => $page->getAllSections($page_id),
             'pages' => Page::all(),
-            'comments' => Comment::getComments($page),
-            'parents' => Comment::getParentComments($page),
-            'revision' => Revision::showRevisionButton($page->slug),
+            'comments' => $commentAction->getComments($page),
+            'parents' => $commentAction->getParentComments($page),
+            'revision' => $revisionAction->showRevisionButton($page->slug),
             'favorite' => Favorite::where('page_id', $page_id)->where('user_id', Auth::id())->where('page_type', 'page')->first(),
             'url' => 'pages',
             'displayComments' => $this->displayComments(),
@@ -78,10 +85,10 @@ class RevisionController extends GiGaWikiController
      * 
      * @return RedirectResponse
      */
-    public function restore(string $project, int $page_id, int $id)
+    public function restore(string $project, int $page_id, int $id): RedirectResponse
     {
         $project = Project::where('slug', $project)->first();
-        $page = Page::find($page_id);
+        $page = Page::findOrFail($page_id);
         $revision = Revision::findOrFail($id);
         $page->update([
             'updated_by' => Auth::id(),
@@ -101,9 +108,8 @@ class RevisionController extends GiGaWikiController
      * 
      * @return RedirectResponce
      */
-    public function delete(string $project, int $page_id, int $id)
+    public function delete(string $project, int $page_id, int $id): RedirectResponse
     {
-        dd($id);
         Revision::findOrFail($id)->delete();
         if(Revision::where('id', $id)->first() === null) {
             return redirect()->route('pages.show', Page::find($page_id)->slug);

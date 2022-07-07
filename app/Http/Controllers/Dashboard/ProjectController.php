@@ -2,20 +2,23 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use App\Http\Controllers\GigawikiController;
-use App\Http\Requests\Dashboard\ProjectRequest;
-use App\Models\Comment;
-use App\Models\Project;
-use App\Models\Subject;
 use App\Models\Tag;
 use App\Models\User;
-use App\Traits\HasUploadFile;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Comment;
+use App\Models\Project;
+use App\Models\Section;
+use App\Models\Subject;
+use App\Actions\TagAction;
 use Illuminate\Support\Str;
+use App\Traits\HasUploadFile;
+use App\Actions\CommentAction;
+use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Contracts\View\Factory;
+use App\Http\Controllers\GigawikiController;
+use App\Http\Requests\Dashboard\ProjectRequest;
+use Illuminate\Contracts\Foundation\Application;
 
 class ProjectController extends GigawikiController
 {
@@ -29,7 +32,7 @@ class ProjectController extends GigawikiController
     public function index(): View|Factory|Application
     {
         return view('projects.index', [
-            'projects' => Project::getProjects(),
+            'projects' => Project::where('user_id', Auth::id())->latest()->paginate(config('app.page')),
             'activities' => $this->getActivity()->setActivity('project'),
             'rows' => Project::where('user_id', Auth::id())->get(),
             'user' => User::loggedUser(),
@@ -62,18 +65,20 @@ class ProjectController extends GigawikiController
      * @param ProjectRequest $request
      * @return RedirectResponse
      */
-    public function store(ProjectRequest $request): RedirectResponse
+    public function store(ProjectRequest $request, TagAction $tagAction): RedirectResponse
     {
         $data = $this->getDataForm($request);
         if ($request->hasFile('featured') && $request->file('featured')->isValid()) {
             $this->renderFeatured('featured');
             $data['image_id'] = $this->saveImageFeatured('featured')->id;
         }
+        
         $project = Project::create($data);
+        
         if(request()->tags !== null) {
-            foreach(\request()->tags as $tag) {
+            foreach(request()->tags as $tag) {
                 if ($tag !== null) {
-                    Tag::createTag($tag, $project, 'project');
+                    $tagAction->createTag($tag, $project, 'project');
                 }
             }
         }
@@ -90,24 +95,24 @@ class ProjectController extends GigawikiController
      * @param string $slug
      * @return Application|Factory|View
      */
-    public function show(string $slug): View|Factory|Application
+    public function show(CommentAction $commentAction, string $slug): View|Factory|Application
     {
-        $this->getView()->setViews('project', Project::getProject($slug)->id);
+        $this->getView()->setViews('project', $this->project($slug)->id);
 
         return view('projects.show', [
-            'slug' => Project::getProject($slug),
+            'slug' => $this->project($slug),
             'rows' => Project::all(),
-            'sections' => Project::getSections(Project::getProject($slug)),
-            'subject' => Subject::find(Project::getProject($slug)->subject_id),
-            'comments' => Comment::getComments(Project::getProject($slug)),
-            'parents' => Comment::getParentComments(Project::getProject($slug)),
+            'sections' => Section::where('project_id', $this->project($slug)->id)->paginate(config('app.page')),
+            'subject' => Subject::find($this->project($slug)->subject_id),
+            'comments' => $commentAction->getComments($this->project($slug)),
+            'parents' => $commentAction->getParentComments($this->project($slug)),
             'user' => User::loggedUser(),
             'views' => $this->getView()->displayViews('project'),
-            'activities' => $this->getActivity()->showActivity('project', Project::getProject($slug)->id),
-            'featured' => $this->getImageFeatured(Project::getProject($slug)->id, 'Project'),
+            'activities' => $this->getActivity()->showActivity('project', $this->project($slug)->id),
+            'featured' => $this->getImageFeatured($this->project($slug)->id, 'Project'),
             'name' => 'name',
             'url' => 'projects',
-            'tags' => Tag::where('page_type', 'project')->where('page_id', Project::getProject($slug)->id)->get(),
+            'tags' => Tag::where('page_type', 'project')->where('page_id', $this->project($slug)->id)->get(),
             'displayComments' => $this->displayComments()
         ]);
     }
@@ -123,13 +128,13 @@ class ProjectController extends GigawikiController
         $this->authorize('update', Project::class);
 
         return view('projects.edit', [
-            'slug' => Project::getProject($slug),
-            'rows' => Project::getProjects(),
+            'slug' => $this->project($slug),
+            'rows' => Project::where('user_id', Auth::id())->latest()->paginate(config('app.page')),
             'subjects' => Subject::all(),
-            'activities' => $this->getActivity()->showActivity('project', Project::getProject($slug)->id),
+            'activities' => $this->getActivity()->showActivity('project', $this->project($slug)->id),
             'user' => User::loggedUser(),
-            'tags' => Tag::where('page_type', '=', 'project')->where('page_id', Project::getProject($slug)->id)->get(),
-            'featured' => $this->getImageFeatured(Project::getProject($slug)->id, 'Project'),
+            'tags' => Tag::where('page_type', '=', 'project')->where('page_id', $this->project($slug)->id)->get(),
+            'featured' => $this->getImageFeatured($this->project($slug)->id, 'Project'),
             'url' => 'projects',
             'name' => 'name',
             'views' => $this->getView()->displayViews('project'),
@@ -144,7 +149,7 @@ class ProjectController extends GigawikiController
      * @param string $slug
      * @return RedirectResponse
      */
-    public function update(ProjectRequest $request, string $slug)
+    public function update(ProjectRequest $request, TagAction $tagAction, string $slug)
     {
         $data = $this->getDataForm($request);
         
@@ -152,11 +157,12 @@ class ProjectController extends GigawikiController
             $this->renderFeatured('featured');
             $data['image_id'] = $this->updateImageFeatured('featured', $request->image_id)->id;
         }
-        $project = Project::getProject($slug);
+        
+        $project = $this->project($slug); 
         $project->update($data);
 
         if(request()->tags !== null) {
-            Tag::updateTags($project, 'project');
+            $tagAction->updateTags($project, 'project');
         }
         $this->getActivity()->saveActivity('updated', $project->id, 'project', $project->name);
 
@@ -176,7 +182,7 @@ class ProjectController extends GigawikiController
         $this->authorize('delete', Project::class);
 
         return view('projects.delete', [
-            'slug' => Project::getProject($slug),
+            'slug' => $this->project($slug),
             'user' => User::loggedUser(),
         ]);
     }
@@ -187,18 +193,18 @@ class ProjectController extends GigawikiController
      * @param string $slug
      * @return RedirectResponse
      */
-    public function destroy(string $slug): RedirectResponse
+    public function destroy(TagAction $tagAction, string $slug): RedirectResponse
     {
-        $project = Project::getProject($slug);
-        $this->getView()->deleteView('project', Project::getProject($slug)->id);
-        $this->getActivity()->saveActivity('deleted', Project::getProject($slug)->id, 'project', $project->name);
-        $this->getActivity()->deleteActivity('project', $project->id);
-        if($project->image_id !== null) {
-            $this->deleteFeatured($project->image_id);
+        $project = $this->project($slug);
+        $this->getView()->deleteView('project', $this->project($slug)->id);
+        $this->getActivity()->saveActivity('deleted', $this->project($slug)->id, 'project', $this->project($slug)->name);
+        $this->getActivity()->deleteActivity('project', $this->project($slug)->id);
+        if($this->project($slug)->image_id !== null) {
+            $this->deleteFeatured($this->project($slug)->image_id);
         }
-        Tag::deleteTags($project->id, 'project');
+        $tagAction->deleteTags($this->project($slug)->id, 'project');
         $project->delete();
-        Project::deletePages($project->id);
+        //Project::deletePages($this->project($slug)->id);
 
         return redirect()
             ->route('projects.index')
@@ -209,12 +215,23 @@ class ProjectController extends GigawikiController
      * @param $request
      * @return mixed
      */
-    public function getDataForm($request): mixed
+    private function getDataForm($request): mixed
     {
         $data = $request->all();
         $data['user_id'] = Auth::id();
-        $data['slug'] = Str::slug($data['name']);
+        $data['slug'] = Str::slug($request->name);
 
         return $data;
+    }
+
+    /**
+     * Return project from a slug.
+     *
+     * @param string $slug
+     * @return mixed
+     */
+    private function project(string $slug): mixed
+    {
+        return Project::where('slug', $slug)->firstOrFail();
     }
 }

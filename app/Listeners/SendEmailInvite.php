@@ -29,7 +29,6 @@ class SendEmailInvite
      */
     public function handle(Profiled $event)
     {
-        //Mail::to($event->user->email)->send(new AccountMail($event->user));
         $event->user->notify(new UserInvitation());
     }
 }

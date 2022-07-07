@@ -4,11 +4,9 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\GigawikiController;
 use App\Http\Requests\Dashboard\PageRequest;
-use App\Models\Comment;
 use App\Models\Favorite;
 use App\Models\Page;
 use App\Models\Project;
-use App\Models\Revision;
 use App\Models\Section;
 use App\Models\Tag;
 use App\Models\User;
@@ -20,6 +18,9 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use App\Actions\RevisionAction;
+use App\Actions\TagAction;
+use App\Actions\CommentAction;
 
 
 class PageController extends GigawikiController
@@ -36,8 +37,8 @@ class PageController extends GigawikiController
         $this->authorize('create', Page::class);
 
         return view('pages.create', [
-            'section' => Section::getSection($section),
-            'project' => Project::getProject($project)
+            'section' => Section::where('slug', $section)->firstOrFail(),
+            'project' => Project::where('slug', $project)->firstOrFail()
         ]);
     }
 
@@ -47,21 +48,25 @@ class PageController extends GigawikiController
      *
      * @return RedirectResponse
      */
-    public function store(Request $request, Page $page): RedirectResponse
+    public function store(Request $request, RevisionAction $revisionAction, TagAction $tagAction): RedirectResponse
     {
         $slug = Str::slug($request->input('title'));
         $created = Page::create($this->getDataForm($request));
-        Revision::createRevision($this->getDataForm($request), $created->id);
+        $revisionAction->createRevision($this->getDataForm($request), $created->id);
+        $project = Project::where('id', $request->input('project_id'))->firstOrFail();
+
         if(\request()->tags !== null) {
             foreach(\request()->tags as $tag) {
                 if ($tag !== null) {
-                    Tag::createTag($tag, $created, 'page');
+                    $tagAction->createTag($tag, $created, 'page');
                 }
             }
         }
-        $this->getActivity()->saveActivity('created', $created->id, 'page', $page->getProject($request->input('project_id'))->name);
+        $this->getActivity()->saveActivity('created', $created->id, 'page', $project->name);
 
-        return redirect()->route('pages.show', $slug);
+        return redirect()
+            ->route('pages.show', $slug)
+            ->with('success', "Page created successfully");
     }
 
     /**
@@ -70,21 +75,21 @@ class PageController extends GigawikiController
      *
      * @return Application|Factory|View
      */
-    public function show(Page $page, string $slug)
+    public function show(Page $page, RevisionAction $revisionAction, CommentAction $commentAction, string $slug)
     {
         return view('pages.show', [
-            'slug' => $page->getPage($slug),
-            'section' => $page->getSectionId($page->getPage($slug)),
+            'slug' => $this->page($slug),
+            'section' => Section::where('id', $this->page($slug)->section_id)->first(), 
             'prev' => $page->setPrevPaginate($page->getPage($slug)),
             'next' => $page->setNextPaginate($page->getPage($slug)),
-            'project' => $page->getProjectId($page->getPage($slug)),
-            'all_sections' => $page->getAllSections($page->getPage($slug)->project_id),
+            'project' => Project::where('id', $this->page($slug)->project_id)->first(),
+            'all_sections' => Section::where('project_id', $this->page($slug)->project_id)->get(),
             'pages' => Page::all(),
-            'comments' => Comment::getComments($page->getPage($slug)),
-            'parents' => Comment::getParentComments($page->getPage($slug)),
+            'comments' => $commentAction->getComments($page->getPage($slug)),
+            'parents' => $commentAction->getParentComments($page->getPage($slug)),
             'user' => User::loggedUser(),
-            'revision' => Revision::showRevisionButton($slug),
-            'favorite' => Favorite::where('page_id', $page->getPage($slug)->id)->where('user_id', Auth::id())->where('page_type', 'pages')->first(),
+            'revision' => $revisionAction->showRevisionButton($slug),
+            'favorite' => Favorite::where('page_id', $this->page($slug)->id)->where('user_id', Auth::id())->where('page_type', 'pages')->first(),
             'url' => 'pages',
             'displayComments' => $this->displayComments()
         ]);
@@ -96,15 +101,15 @@ class PageController extends GigawikiController
      *
      * @return Application|Factory|View
      */
-    public function edit(Page $page, string $slug)
+    public function edit(string $slug)
     {
         $this->authorize('update', Page::class);
 
         return view('pages.edit', [
-            'page' => $page->getPage($slug),
-            'section' => $page->getSectionId($page->getPage($slug)),
-            'project' => $page->getProjectId($page->getPage($slug)),
-            'tags' => Tag::where('page_type', 'page')->where('page_id', $page->getPage($slug)->id)->get()
+            'page' => $this->page($slug),
+            'section' => Section::where('id', $this->page($slug)->section_id)->first(),
+            'project' =>  Project::where('id', $this->page($slug)->project_id)->first(),
+            'tags' => Tag::where('page_type', 'page')->where('page_id', $this->page($slug)->id)->get()
         ]);
     }
 
@@ -115,13 +120,13 @@ class PageController extends GigawikiController
      *
      * @return RedirectResponse
      */
-    public function update(Page $page, Request $request, string $slug): RedirectResponse
+    public function update(Request $request, RevisionAction $revisionAction, TagAction $tagAction, string $slug): RedirectResponse
     {
-        $update = $page->getPage($slug);
+        $update = $this->page($slug);
         $update->update($this->getDataForm($request));
-        Revision::createRevision($this->getDataForm($request), $update->id);
+        $revisionAction->createRevision($this->getDataForm($request), $update->id);
         if ($request->tags !== null) {
-            Tag::updateTags($update, 'page');
+            $tagAction->updateTags($update, 'page');
         }
 
         return redirect()
@@ -135,16 +140,18 @@ class PageController extends GigawikiController
      *
      * @return RedirectResponse
      */
-    public function destroy(Page $page, string $slug): RedirectResponse
+    public function destroy(string $slug): RedirectResponse
     {
-        $obj = $page->getPage($slug);
+        $obj = $this->page($slug);
+        $project = Project::where('id', $obj->project_id)->firstOrFail();
+        $section = Section::where('id', $obj->section_id)->firstOrFail();
         $obj->delete();
         $this->getActivity()->saveActivity('deleted', $obj->id, 'page', $obj->slug);
-
+        
         return redirect()
             ->route('sections.show', [
-                $page->getProjectId($obj)->slug,
-                $page->getSectionId($obj)->slug
+                $project->slug,
+                $section->slug
             ])
             ->with('success', 'Page deleted successfully');
     }
@@ -155,12 +162,12 @@ class PageController extends GigawikiController
      *
      * @return Application|Factory|View
      */
-    public function delete(Page $page, string $slug)
+    public function delete(string $slug)
     {
         $this->authorize('delete', Page::class);
 
         return view('pages.delete', [
-            'page' => $page->getPage($slug)
+            'page' => $this->page($slug)
         ]);
     }
 
@@ -170,7 +177,7 @@ class PageController extends GigawikiController
      *
      * @return mixed
      */
-    public function getDataForm($request, $revision = null)
+    private function getDataForm($request, $revision = null)
     {
         $data['section_id'] = $request->input('section_id');
         $data['project_id'] = $request->input('project_id');
@@ -186,6 +193,17 @@ class PageController extends GigawikiController
         }
 
         return $data;
+    }
+
+    /**
+     * Get page.
+     *
+     * @param string $slug
+     * @return mixed
+     */
+    private function page(string $slug): mixed
+    {
+        return Page::where('slug', $slug)->firstOrFail();
     }
 
 }

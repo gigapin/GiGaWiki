@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use App\Http\Controllers\GigawikiController;
-use App\Http\Requests\Dashboard\SectionRequest;
-use App\Models\Comment;
+use App\Models\Page;
+use App\Models\User;
 use App\Models\Project;
 use App\Models\Section;
 use App\Models\Subject;
-use App\Models\User;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
+use Illuminate\Support\Str;
+use App\Actions\CommentAction;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Str;
+use Illuminate\Contracts\View\Factory;
+use App\Http\Controllers\GigawikiController;
+use App\Http\Requests\Dashboard\SectionRequest;
+use Illuminate\Contracts\Foundation\Application;
 
 class SectionController extends GigawikiController
 {
@@ -28,7 +29,7 @@ class SectionController extends GigawikiController
         $this->authorize('create', Section::class);
 
         return view('sections.create', [
-            'project' => Project::getProject($slug),
+            'project' => $this->project($slug),
             'user' => User::loggedUser(),
         ]);
     }
@@ -56,18 +57,18 @@ class SectionController extends GigawikiController
      * @param string $slug
      * @return Application|Factory|View
      */
-    public function show(string $project, string $slug): Application|Factory|View
+    public function show(CommentAction $comment, string $project, string $slug): Application|Factory|View
     {
         return view('sections.show', [
-            'section' => Section::getSection($slug),
-            'slug' => Section::getSection($slug),
-            'pages' => Section::getPages($slug),
-            'comments' => Comment::getComments(Section::getSection($slug)),
-            'parents' => Comment::getParentComments(Section::getSection($slug)),
+            //'section' => $this->section($slug),
+            'slug' => $this->section($slug),
+            'pages' => Page::where('section_id', $this->section($slug)->id)->paginate(config('app.page')),
+            'comments' => $comment->getComments($this->section($slug)),
+            'parents' => $comment->getParentComments($this->section($slug)),
             'user' => User::loggedUser(),
-            'activities' => $this->getActivity()->showActivity('section', Section::getSection($slug)->id),
-            'project' => Project::getProject($project),
-            'subject' => Subject::getProject(Project::getProject($project)),
+            'activities' => $this->getActivity()->showActivity('section', $this->section($slug)->id),
+            'project' => $this->project($project),
+            'subject' => Subject::where('id', $this->project($project)->subject_id)->firstOrFail(),
             'url' => 'subjects',
             'name' => 'name',
             'rows' => Section::all(),
@@ -86,9 +87,9 @@ class SectionController extends GigawikiController
         $this->authorize('update', Section::class);
 
         return view('sections.edit', [
-            'slug' => Section::getSection($slug),
+            'slug' => $this->section($slug),
             'user' => User::loggedUser(),
-            'project' => Section::getProject(Section::getSection($slug))
+            'project' => Project::where('id', $this->section($slug)->project_id)->firstOrFail()
         ]);
     }
 
@@ -101,13 +102,17 @@ class SectionController extends GigawikiController
      */
     public function update(SectionRequest $request, string $slug): RedirectResponse
     {
-        $update = Section::getSection($slug);
+        $update = $this->section($slug);
         $update->update($this->getDataForm($request));
         $section = Section::getSection($this->getDataForm($request)['slug']);
         $this->getActivity()->saveActivity('updated', $update->id, 'section', $update->title);
 
         return redirect()
+<<<<<<< HEAD
+            ->route('projects.show', $this->section($slug)->project->slug)
+=======
             ->route('projects.show', $section->project->slug)
+>>>>>>> origin/master
             ->with('success', 'Section updated successfully');
     }
 
@@ -119,12 +124,12 @@ class SectionController extends GigawikiController
      */
     public function destroy(string $slug): RedirectResponse
     {
-        $section = Section::getSection($slug);
-        $project = Section::getSection($slug)->project->slug;
-        Section::deletePages($section->id);
+        $section = $this->section($slug);
+        $project = $this->section($slug)->project->slug;
+        
         $this->getActivity()->saveActivity('deleted', $section->id, 'section', $section->title);
         $this->getActivity()->deleteActivity('section', $section->id);
-        Section::getSection($slug)->delete();
+        $section->delete();
 
         return redirect()
             ->route('projects.show', $project)
@@ -140,7 +145,7 @@ class SectionController extends GigawikiController
         $this->authorize('delete', Section::class);
 
         return view('sections.delete', [
-            'section' => Section::getSection($slug),
+            'section' => $this->section($slug),
             'user' => User::loggedUser()
         ]);
     }
@@ -149,11 +154,33 @@ class SectionController extends GigawikiController
      * @param $request
      * @return mixed
      */
-    public function getDataForm($request): mixed
+    private function getDataForm($request): mixed
     {
         $data = $request->all();
         $data['slug'] = Str::slug($request->title);
 
         return $data;
+    }
+
+    /**
+     * Return project from slug.
+     *
+     * @param string $slug
+     * @return mixed
+     */
+    private function project(string $slug): mixed
+    {
+        return Project::where('slug', $slug)->firstOrFail();
+    }
+
+    /**
+     * Return section from slug.
+     *
+     * @param string $slug
+     * @return mixed
+     */
+    private function section(string $slug): mixed
+    {
+        return Section::where('slug', $slug)->firstOrFail();
     }
 }

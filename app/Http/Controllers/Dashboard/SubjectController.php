@@ -16,11 +16,9 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Actions\TagAction;
 
 
-/**
- *
- */
 class SubjectController extends GigawikiController
 {
     use HasUploadFile;
@@ -32,8 +30,9 @@ class SubjectController extends GigawikiController
      */
     public function index()
     {   
+        //dd(Subject::latest()->paginate(config('app.page')));
         return view('subjects.index', [
-            'bodies' => Subject::latest()->paginate(env('APP_PAGE')),
+            'bodies' => Subject::latest()->paginate(config('app.page')),
             'activities' => $this->getActivity()->setActivity('subject'),
             'rows' => Subject::where('user_id', Auth::id())->get(),
             'user' => User::loggedUser(),
@@ -69,7 +68,7 @@ class SubjectController extends GigawikiController
      * @return RedirectResponse
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function store(Request $request)
+    public function store(SubjectRequest $request, TagAction $tagAction)
     {
         $this->authorize('create', Subject::class);
 
@@ -82,7 +81,7 @@ class SubjectController extends GigawikiController
         if(request()->tags !== null) {
             foreach(request()->tags as $tag) {
                 if ($tag !== null) {
-                    Tag::createTag($tag, $subject, 'subject');
+                    $tagAction->createTag($tag, $subject, 'subject');
                 }
             }
         }
@@ -101,17 +100,17 @@ class SubjectController extends GigawikiController
      */
     public function show(string $slug)
     {
-        $this->getView()->setViews('subject', Subject::getSubject($slug)->id);
-
+        $this->getView()->setViews('subject', $this->subject($slug)->id);
+       
         return view('subjects.show', [
-            'slug' => Subject::getSubject($slug),
-            'projects' => Project::latestSubject(Subject::getSubject($slug)),
-            'activities' => $this->getActivity()->showActivity('subject', Subject::getSubject($slug)->id),
+            'slug' => $this->subject($slug),
+            'projects' => Project::where('subject_id', $this->subject($slug)->id)->latest()->paginate(config('app.page')),
+            'activities' => $this->getActivity()->showActivity('subject', $this->subject($slug)->id),
             'rows' => Subject::all(),
             'user' => User::loggedUser(),
             'views' => $this->getView()->pageTypeView('subject', 4),
-            'tags' => Tag::where('page_id', '=', Subject::getSubject($slug)->id)->get(),
-            'featured' => $this->getImageFeatured(Subject::getSubject($slug)->id, 'Subject'),
+            'tags' => Tag::where('page_id', $this->subject($slug)->id)->get(),
+            'featured' => $this->getImageFeatured($this->subject($slug)->id, 'Subject'),
             'name' => 'name',
             'url' => 'subjects'
         ]);
@@ -129,10 +128,10 @@ class SubjectController extends GigawikiController
         $this->authorize('update', Subject::class);
 
         return view('subjects.edit', [
-            'slug' => Subject::getSubject($slug),
+            'slug' => $this->subject($slug),
             'user' => User::loggedUser(),
-            'tags' => Tag::where('page_type', 'subject')->where('page_id', Subject::getSubject($slug)->id)->get(),
-            'featured' => $this->getImageFeatured(Subject::getSubject($slug)->id, 'Subject'),
+            'tags' => Tag::where('page_type', 'subject')->where('page_id', $this->subject($slug)->id)->get(),
+            'featured' => $this->getImageFeatured($this->subject($slug)->id, 'Subject'),
         ]);
     }
 
@@ -144,7 +143,7 @@ class SubjectController extends GigawikiController
      * @return RedirectResponse
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function update(SubjectRequest $request, string $slug)
+    public function update(SubjectRequest $request, TagAction $tagAction, string $slug)
     {
         $this->authorize('update', Subject::class);
 
@@ -155,11 +154,11 @@ class SubjectController extends GigawikiController
             $data['image_id'] = $this->updateImageFeatured('featured', $request->image_id)->id;
         }
         
-        $subject = Subject::getSubject($slug);
+        $subject = $this->subject($slug);
         $subject->update($data);
 
         if (\request()->tags !== null) {
-            Tag::updateTags(Subject::getSubject($slug), 'subject');
+            $tagAction->updateTags($subject, 'subject');
         }
         $this->getActivity()->saveActivity('updated', $subject->id, 'subject', $subject->name);
 
@@ -180,7 +179,7 @@ class SubjectController extends GigawikiController
         $this->authorize('delete', Subject::class);
 
         return view('subjects.delete', [
-            'slug' => Subject::getSubject($slug),
+            'slug' => $this->subject($slug),
             'user' => User::loggedUser(),
         ]);
     }
@@ -192,21 +191,21 @@ class SubjectController extends GigawikiController
      * @return RedirectResponse
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function destroy(string $slug)
+    public function destroy(TagAction $tagAction, string $slug)
     {
         $this->authorize('delete', Subject::class);
 
-        $subject = Subject::getSubject($slug);
+        $subject = $this->subject($slug);
         $this->getView()->deleteView('subject', $subject->id);
         $this->getActivity()->saveActivity('deleted', $subject->id, 'subject', $subject->name);
         $this->getActivity()->deleteActivity('subject', $subject->id);
         if($subject->image_id !== null) {
             $this->deleteFeatured($subject->image_id);
         }
-        Tag::deleteTags($subject->id, 'subject');
+        $tagAction->deleteTags($subject->id, 'subject');
         $subject->delete();
         // Deletes projects binded
-        Subject::deleteProjects($subject);
+        //Subject::deleteProjects($subject);
 
         return redirect()
             ->route('subjects.index')
@@ -217,7 +216,7 @@ class SubjectController extends GigawikiController
      * @param $request
      * @return array
      */
-    public function getDataForm($request)
+    private function getDataForm($request)
     {
         $data = $request->all();
         $data['name'] = $request->name;
@@ -226,5 +225,10 @@ class SubjectController extends GigawikiController
         $data['slug'] = Str::slug($request->name);
 
         return $data;
+    }
+
+    private function subject(string $slug)
+    {
+        return Subject::where('slug', $slug)->firstOrFail();
     }
 }

@@ -29,8 +29,7 @@ class SubjectRequest extends FormRequest
         'user_id' => ['exists:App\Models\User,id'],
         'name' => [
             'max:200',
-            'min:3',
-            'unique:projects',  
+            'min:3', 
             Rule::unique('subjects')
                 ->ignore($this->name, 'name')
             ],
@@ -45,6 +44,6 @@ class SubjectRequest extends FormRequest
                 ->maxHeight(1281)
                 ->minHeight(99)
             ]
-    ];
+        ];
     }
 }

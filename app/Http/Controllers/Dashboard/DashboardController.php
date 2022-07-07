@@ -35,7 +35,7 @@ class DashboardController extends GigawikiController
             'activities' => $this->getActivity()->showAllActivity(),
             'views' => $this->getView()->showAllViews(),
             'user' => User::loggedUser(),
-            'project_latest' => Project::latestProject(3),
+            'project_latest' => Project::where('user_id', Auth::id())->latest()->paginate(3),
             'pages' => Page::latestPage(3),
             'project_all' => Project::all(),
             'rows' => Subject::all(),

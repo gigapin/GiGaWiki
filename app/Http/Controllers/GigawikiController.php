@@ -7,12 +7,13 @@ use App\Services\ActivityService;
 use App\Services\ViewService;
 use App\Models\Setting;
 
+
 class GigawikiController extends Controller
 {
     /**
      * @return ActivityService
      */
-    public function getActivity()
+    public function getActivity(): ActivityService
     {
         return new ActivityService();
     }
@@ -20,12 +21,17 @@ class GigawikiController extends Controller
     /**
      * @return ViewService
      */
-    public function getView()
+    public function getView(): ViewService
     {
         return new ViewService();
     }
 
-    public function displayComments()
+    /**
+     * Show or not comments.
+     *
+     * @return bool
+     */
+    public function displayComments(): bool
     {
         $setting = Setting::where('key', 'disable-comments')->first();
         

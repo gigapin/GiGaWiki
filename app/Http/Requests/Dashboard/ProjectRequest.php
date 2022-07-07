@@ -30,17 +30,26 @@ class ProjectRequest extends FormRequest
      */
     public function rules(): array
     {
-        $user = User::where('id', Auth::id())->first();
-
         return [
+            'user_id' => ['exists:App\Models\User,id'],
             'name' => [
-                'required',
                 'max:200',
-                //Rule::unique('projects')->ignore($user)
+                'min:3',
+                //'unique:projects',  
+                Rule::unique('projects')
+                    ->ignore($this->name, 'name')
                 ],
-            'subject_id' => 'required',
-            'description' => 'nullable|max:5000',
-            'featured' => 'nullable|image'
-        ];
+            'slug' => ['string'],
+            'description' => ['nullable', 'max:5000'],
+            'featured' => [
+                'nullable', 
+                'image', 
+                Rule::dimensions()
+                    ->maxWidth(1921)
+                    ->minWidth(99)
+                    ->maxHeight(1281)
+                    ->minHeight(99)
+                ]
+            ];
     }
 }
