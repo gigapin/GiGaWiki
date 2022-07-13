@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Tag;
 use Tests\TestCase;
 use App\Models\Page;
 use App\Models\User;
@@ -15,7 +16,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-
+use Mockery\Matcher\Subset;
 
 class ProjectTest extends TestCase
 {
@@ -72,7 +73,7 @@ class ProjectTest extends TestCase
 		$subject = Subject::factory()->create([
 			'user_id' => $this->user->id,
 		]);
-		$project = Project::factory()->create([
+		$project = Project::factory(7)->create([
 			'user_id' => $this->user->id,
 			'subject_id' => $subject->id
 		]);
@@ -399,7 +400,7 @@ class ProjectTest extends TestCase
 	}
 
 	/**
-	 * Update cover image and delte old uploaded file.
+	 * Update cover image and delete old uploaded file.
 	 *
 	 * @return void
 	 */
@@ -444,5 +445,106 @@ class ProjectTest extends TestCase
 	
 		$res->assertStatus(302);
 		$res->assertRedirect('projects');
+	}
+
+	/**
+	 * @return void
+	 */
+	public function test_logged_user_can_add_tag_to_project()
+	{
+		$this->create_user(1);
+		$subject = Subject::factory()->create([
+			'user_id' => $this->user->id
+		]);
+		$nameProject = $this->faker->sentence(3, true); 
+		$project = [
+			'user_id' => $this->user->id,
+			'subject_id' => $subject->id,
+			'name' => $nameProject,
+			'slug' => Str::slug($nameProject),
+			'image_id' => null
+		];
+		$tagName = $this->faker->word;
+		$id = $this->faker->randomDigitNot(0);
+		$tag = [
+			'user_id' => $this->user->id,
+			'page_id' => $id,
+			'page_type' => 'project',
+			'name' => $tagName
+		];
+		Tag::create($tag);
+		
+		$res = $this->actingAs($this->user)->post('/projects', $project);
+		$res->assertRedirect('/projects');
+		$res->assertSessionHas('success');
+		$this->assertDatabaseHas('tags', $tag);
+		
+	}
+
+	public function test_logged_user_can_update_tags_in_projects()
+	{
+		$this->create_user(1);
+		$subject = Subject::factory()->create([
+			'user_id' => $this->user->id
+		]);
+		$project = Project::factory()->create([
+			'user_id' => $this->user->id,
+			'subject_id' => $subject->id
+		]);
+		$tagName = $this->faker->word;
+		$updateName = $this->faker->word;
+		$id = $this->faker->randomDigitNot(0);
+		$tag = [
+			'user_id' => $this->user->id,
+			'page_id' => $id,
+			'page_type' => 'project',
+			'name' => $tagName
+		];
+		$newTag = Tag::create($tag);
+		$res = $this->actingAs($this->user)->patch('/projects/' . $project->slug, [
+			'page_id' => $id,
+			'page_type' => 'subject',
+			'name' => $updateName
+		]);
+		$newTag->update([
+			'page_id' => $id,
+			'page_type' => 'subject',
+			'name' => $updateName
+		]);
+		$res->assertRedirect('projects');
+		$res->assertSessionHas('success');
+		$this->assertDatabaseHas('tags', [
+			'page_id' => $id,
+			'page_type' => 'subject',
+			'name' => $updateName
+		]);
+	}
+
+	public function test_logged_user_can_delete_tag_in_project()
+	{
+		$this->create_user(1);
+		$subject = Subject::factory()->create([
+			'user_id' => $this->user->id
+		]);
+		$project = Project::factory()->create([
+			'user_id' => $this->user->id,
+			'subject_id' => $subject->id
+		]);
+		$tagName = $this->faker->word;
+		$updateName = $this->faker->word;
+		$id = $this->faker->randomDigitNot(0);
+		$tag = [
+			'user_id' => $this->user->id,
+			'page_id' => $id,
+			'page_type' => 'subject',
+			'name' => $tagName
+		];
+		$newTag = Tag::create($tag);
+		$this->assertEquals(1, $newTag->count());
+		$res = $this->actingAs($this->user)->delete('/projects/' . $project->slug);
+		
+		$res->assertRedirect('projects');
+		$res->assertSessionHas('success');
+		$this->assertEquals(1, $newTag->count());
 	}
 }

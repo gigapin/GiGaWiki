@@ -56,7 +56,7 @@ Route::middleware(['auth'])->group(function() {
     Route::delete('sections/{slug}', [SectionController::class, 'destroy'])->name('sections.destroy');
     Route::get('sections/{slug}', [SectionController::class, 'delete'])->name('sections.delete');
 
-    Route::get('projects/{project}/sections/{section}/pages/create', [PageController::class, 'create'])->name('pages.create');
+    Route::get('{project:slug}/{section:slug}/pages/create', [PageController::class, 'create'])->name('pages.create');
     Route::post('pages', [PageController::class, 'store'])->name('pages.store');
     Route::get('pages/{slug}', [PageController::class, 'show'])->name('pages.show');
     Route::get('pages/{slug}/edit', [PageController::class, 'edit'])->name('pages.edit');

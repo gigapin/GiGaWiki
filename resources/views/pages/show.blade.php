@@ -73,7 +73,7 @@
         </div>
       </div>
     @endif
-
+      
     @if ($displayComments === 'false')
       @include('partials.comments')
     @endif

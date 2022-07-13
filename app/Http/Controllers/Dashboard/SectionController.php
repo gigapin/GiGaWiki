@@ -60,7 +60,6 @@ class SectionController extends GigawikiController
     public function show(CommentAction $comment, string $project, string $slug): Application|Factory|View
     {
         return view('sections.show', [
-            //'section' => $this->section($slug),
             'slug' => $this->section($slug),
             'pages' => Page::where('section_id', $this->section($slug)->id)->paginate(config('app.page')),
             'comments' => $comment->getComments($this->section($slug)),
@@ -104,15 +103,11 @@ class SectionController extends GigawikiController
     {
         $update = $this->section($slug);
         $update->update($this->getDataForm($request));
-        $section = Section::getSection($this->getDataForm($request)['slug']);
+        $section = $this->section($this->getDataForm($request)['slug']);
         $this->getActivity()->saveActivity('updated', $update->id, 'section', $update->title);
 
         return redirect()
-<<<<<<< HEAD
-            ->route('projects.show', $this->section($slug)->project->slug)
-=======
             ->route('projects.show', $section->project->slug)
->>>>>>> origin/master
             ->with('success', 'Section updated successfully');
     }
 

@@ -14,6 +14,7 @@ class Tag extends Model
      * @var string[]
      */
     protected $fillable = [
+        'user_id',
         'page_id',
         'page_type',
         'name'

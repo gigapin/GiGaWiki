@@ -10,6 +10,7 @@
       type="text" 
       name="tags[]" 
       class="w-full py-1 px-2 border-2 border-gray-200 mt-2 input-tag input-area-tags"
+      maxlength="30"
       >
     
     <a href="javascript:void(0)" onclick="appendTag()" class="text-sm text-indigo-400 mt-4" id="add-input-tag">Add input tag</a>

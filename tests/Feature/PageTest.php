@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use Carbon\Carbon;
+use App\Models\Tag;
 use Tests\TestCase;
 use App\Models\Page;
 use App\Models\User;
@@ -65,6 +66,23 @@ class PageTest extends TestCase
     {
         $page = Page::create($this->createPage(1));   
         $res = $this->actingAs($this->user)->get('pages/' . $page->slug);
+        $res->assertStatus(200);
+    }
+
+    public function test_logged_user_can_access_create_page()
+    {
+        $this->create_user(1);
+        $subject = Subject::factory()->create([
+            'user_id' => $this->user->id
+        ]);
+        $project = Project::factory()->create([
+            'user_id' => $this->user->id,
+            'subject_id' => $subject->id
+        ]);
+        $section = Section::factory()->create([
+            'project_id' => $project->id
+        ]);
+        $res = $this->actingAs($this->user)->get("$project->slug/$section->slug/pages/create");
         $res->assertStatus(200);
     }
 
@@ -169,7 +187,121 @@ class PageTest extends TestCase
         $res->assertSessionHas('success');
     }
 
+    /**
+	 * @return void
+	 */
+	public function test_logged_user_can_add_tag_to_page()
+	{
+		$this->create_user(1);
+		$tagName = $this->faker->word;
+		$id = $this->faker->randomDigitNot(0);
+        $title = $this->faker->sentence(2,true);
+        $content = $this->faker->paragraph(3, true);
+        $subject = Subject::factory()->create([
+            'user_id' => $this->user->id
+        ]);
+        $project = Project::factory()->create([
+            'user_id' => $this->user->id,
+            'subject_id' => $subject->id
+        ]);
+        $section = Section::factory()->create([
+            'project_id' => $project->id
+        ]);
+		$tag = [
+            'user_id' => $this->user->id,
+			'page_id' => $id,
+			'page_type' => 'page',
+			'name' => $tagName
+		];
+		Tag::create($tag);
+		$pg = [
+			'title' => $title,
+			'content' => $content,
+			'page_type' => 'page',
+			'created_by' => $this->user->id,
+            'updated_by' => $this->user->id,
+            'owned_by' => $this->user->id,
+            'project_id' => $project->id,
+            'section_id' => $section->id,
+			'slug' => Str::slug($title)
+		];
+        $res = $this->actingAs($this->user)->post('pages/', $pg);
+        $res->assertRedirect(route('pages.show', Str::slug($title)));
+        $res->assertSessionHas('success');
+		$this->assertDatabaseHas('tags', $tag);
+		
+	}
 
+	public function test_logged_user_can_update_tags_in_page()
+	{
+        $this->withoutExceptionHandling();
+		//$this->create_user(1);
+		$page = Page::create($this->createPage(1));
+        $title = $this->faker->sentence(2,true);
+        $slug = Str::slug($title);
+        $content = $this->faker->paragraph(3, true);
+        $tagName = $this->faker->word;
+		$id = $this->faker->randomDigitNot(0);
+        $tag = [
+            'user_id' => $this->user->id,
+			'page_id' => $page->id,
+			'page_type' => 'page',
+			'name' => $tagName
+		];
+        $newTag = $this->faker->word;
+		$tags = Tag::create($tag);
+        $res = $this->actingAs($this->user)->put("pages/" . $page->slug, [ 
+            'title' => $title,
+			'content' => $content,
+			'page_type' => 'page',
+			'created_by' => $page->created_by,
+            'updated_by' => $page->updated_by,
+            'owned_by' => $page->owned_by,
+            'project_id' => $page->project_id,
+            'section_id' => $page->section_id,
+			'slug' => $slug,
+            'page_id' => $page->id,
+			'page_type' => 'page',
+			'name' => $newTag
+        ]);
+        $tags->update([
+            'page_id' => $page->id,
+			'page_type' => 'page',
+			'name' => $newTag
+        ]);
+        
+        $res->assertStatus(302);
+        $res->assertRedirect(route('pages.show', $slug));
+        $res->assertSessionHas('success');
+        $this->assertDatabaseHas('tags', [
+            'user_id' => $this->user->id,
+            'page_id' => $page->id,
+			'page_type' => 'page',
+			'name' => $newTag
+        ]);
+	}
+
+	public function test_logged_user_can_delete_tag_in_page()
+	{
+		$page = $this->createPage(1);
+		Page::create($page);
+		$tagName = $this->faker->word;
+		$updateName = $this->faker->word;
+		$id = $this->faker->randomDigitNot(0);
+		$tag = [
+            'user_id' => $this->user->id,
+			'page_id' => $id,
+			'page_type' => 'subject',
+			'name' => $tagName
+		];
+		$newTag = Tag::create($tag);
+		$this->assertEquals(1, $newTag->count());
+		$res = $this->actingAs($this->user)->delete('/pages/' . $page['slug']);
+		
+		$res->assertStatus(302);
+		$res->assertSessionHas('success');
+		$this->assertEquals(1, $newTag->count());
+	}
 
 
    

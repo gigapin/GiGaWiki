@@ -3,6 +3,7 @@
 namespace App\Actions;
 
 use App\Models\Tag;
+use Illuminate\Support\Facades\Auth;
 
 class TagAction
 {
@@ -14,10 +15,11 @@ class TagAction
      * @param string $type
      * @return mixed
      */
-    public function createTag(string $data, object $page, string $type)
+    public function createTag(int $user, string $data, object $page, string $type)
     {
         return Tag::create([
-            'name' => $data,
+            'user_id' => $user,
+            'name' => htmlspecialchars($data),
             'page_id' => $page->id,
             'page_type' => $type
         ]);
@@ -37,7 +39,7 @@ class TagAction
             foreach(request()->edit as $row) {
                 foreach($row as $k => $v) {
                     $tag = Tag::find($k);
-                    $tag->name = $v;
+                    $tag->name = htmlspecialchars($v);
                     $tag->save();
                 }
             }
@@ -46,7 +48,8 @@ class TagAction
             foreach(request()->tags as $tag) {
                 if ($tag !== null) {
                     Tag::create([
-                        'name' => $tag,
+                        'user_id' => Auth::id(),
+                        'name' => htmlspecialchars($tag),
                         'page_id' => $page_id->id,
                         'page_type' => $page_type
                     ]);
@@ -64,7 +67,10 @@ class TagAction
      */
     public function deleteTags(int $id, string $type)
     {
-        $tags = Tag::where('page_id', $id)->where('page_type', $type)->get();
+        $tags = Tag::where('page_id', $id)
+            ->where('page_type', $type)
+            ->where('user_id', Auth::id())
+            ->get();
         if ($tags !== null) {
             foreach($tags as $tag) {
                 $tag->delete();

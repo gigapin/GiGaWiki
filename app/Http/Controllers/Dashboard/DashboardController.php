@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use App\Http\Controllers\GigawikiController;
 use App\Models\Page;
-use App\Models\Project;
-use App\Models\Subject;
 use App\Models\User;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
+use App\Models\Project;
+use App\Models\Setting;
+use App\Models\Subject;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Contracts\View\Factory;
+use App\Http\Controllers\GigawikiController;
+use Illuminate\Contracts\Foundation\Application;
 
 class DashboardController extends GigawikiController
 {
@@ -22,6 +23,7 @@ class DashboardController extends GigawikiController
      */
     public function index()
     {
+        
         $getUrl = array();
         $visited = $this->getView()->showAllViews();
         

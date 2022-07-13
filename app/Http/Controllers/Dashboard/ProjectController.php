@@ -78,7 +78,7 @@ class ProjectController extends GigawikiController
         if(request()->tags !== null) {
             foreach(request()->tags as $tag) {
                 if ($tag !== null) {
-                    $tagAction->createTag($tag, $project, 'project');
+                    $tagAction->createTag(Auth::id(), $tag, $project, 'project');
                 }
             }
         }

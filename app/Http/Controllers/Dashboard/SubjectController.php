@@ -81,7 +81,7 @@ class SubjectController extends GigawikiController
         if(request()->tags !== null) {
             foreach(request()->tags as $tag) {
                 if ($tag !== null) {
-                    $tagAction->createTag($tag, $subject, 'subject');
+                    $tagAction->createTag(Auth::id(), $tag, $subject, 'subject');
                 }
             }
         }

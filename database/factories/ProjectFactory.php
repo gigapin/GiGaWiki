@@ -24,7 +24,6 @@ class ProjectFactory extends Factory
      */
     public function definition(): array
     {
-        //$user = User::factory()->create();
         
         $name = $this->faker->sentence(3, true);
 

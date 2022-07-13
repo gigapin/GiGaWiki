@@ -252,7 +252,6 @@ class SubjectTest extends TestCase
 			'featured' => $file,
 			
 		];
-		
 
 		$res = $this->actingAs($this->user)->post('/subjects', $data);
 		Storage::disk('public')->assertExists("uploads/" . $this->user->id . "/" . $file->hashName());
@@ -288,6 +287,7 @@ class SubjectTest extends TestCase
 		$tagName = $this->faker->word;
 		$id = $this->faker->randomDigitNot(0);
 		$tag = [
+			'user_id' => $this->user->id,
 			'page_id' => $id,
 			'page_type' => 'subject',
 			'name' => $tagName
@@ -308,6 +308,88 @@ class SubjectTest extends TestCase
 		$res->assertSessionHas('success');
 		$this->assertDatabaseHas('tags', $tag);
 		$this->assertDatabaseHas('activities', $activity);
+	}
+
+	public function test_logged_editor_user_cannot_add_tag_to_subject()
+	{
+		$this->create_user(2);
+		$tagName = $this->faker->word;
+		$id = $this->faker->randomDigitNot(0);
+		$tag = [
+			'user_id' => $this->user->id,
+			'page_id' => $id,
+			'page_type' => 'subject',
+			'name' => $tagName
+		];
+		
+		Tag::create($tag);
+	
+		$res = $this->actingAs($this->user)->post('/subjects', $tag);
+		$res->assertStatus(403);
+	}
+
+	public function test_logged_user_can_update_tags_in_subjects()
+	{
+		$this->create_user(1);
+		$subject = Subject::factory()->create([
+			'user_id' => $this->user->id
+		]);
+		$tagName = $this->faker->word;
+		$updateName = $this->faker->word;
+		$id = $this->faker->randomDigitNot(0);
+		$tag = [
+			'user_id' => $this->user->id,
+			'page_id' => $id,
+			'page_type' => 'subject',
+			'name' => $tagName
+		];
+		$newTag = Tag::create($tag);
+		$res = $this->actingAs($this->user)->patch('/subjects/' . $subject->slug, [
+			'user_id' => $this->user->id,
+			'page_id' => $id,
+			'page_type' => 'subject',
+			'name' => $updateName
+		]);
+		$newTag->update([
+			'page_id' => $id,
+			'page_type' => 'subject',
+			'name' => $updateName
+		]);
+		$res->assertRedirect('subjects');
+		$res->assertSessionHas('success');
+		$this->assertDatabaseHas('tags', [
+			'page_id' => $id,
+			'page_type' => 'subject',
+			'name' => $updateName
+		]);
+	}
+
+	public function test_logged_user_can_delete_tag_in_subject()
+	{
+		$this->create_user(1);
+		$subject = Subject::factory()->create([
+			'user_id' => $this->user->id
+		]);
+		$tagName = $this->faker->word;
+		$updateName = $this->faker->word;
+		$id = $this->faker->randomDigitNot(0);
+		$tag = [
+			'user_id' => $this->user->id,
+			'page_id' => $id,
+			'page_type' => 'subject',
+			'name' => $tagName
+		];
+		$newTag = Tag::create($tag);
+		$this->assertEquals(1, $newTag->count());
+		$res = $this->actingAs($this->user)->delete('/subjects/' . $subject->slug, [
+			'id' => $id
+		]);
+		$newTag->delete([
+			'id' => $id
+		]);
+		$res->assertRedirect('subjects');
+		$res->assertSessionHas('success');
+		$this->assertEquals(0, Tag::count());
 	}
 
 	public function test_logged_user_can_view_subject()
@@ -437,9 +519,9 @@ class SubjectTest extends TestCase
 	public function test_logged_user_cannot_view_edit_button_in_show_page()
 	{
 		$this->create_user(2);
-		$subject = Subject::factory()->create(
-			['user_id' => $this->user->id]
-		);
+		$subject = Subject::factory()->create([
+			'user_id' => $this->user->id
+		]);
 		$res = $this->actingAs($this->user)->get("subjects/$subject->slug");
 		$res->assertDontSee('Edit');
 	}

@@ -17,7 +17,7 @@ class PagePolicy
      */
     public function before(User $user, $ability)
     {
-        if($user->role_user->role_name === "admin" || $user->role_user->role_name === "editor") {
+        if($user->role_user->role_id === 1 || $user->role_user->role_id === 2) {
             return true;
         }
     }

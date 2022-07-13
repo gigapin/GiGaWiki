@@ -58,7 +58,7 @@ class PageController extends GigawikiController
         if(\request()->tags !== null) {
             foreach(\request()->tags as $tag) {
                 if ($tag !== null) {
-                    $tagAction->createTag($tag, $created, 'page');
+                    $tagAction->createTag(Auth::id(), $tag, $created, 'page');
                 }
             }
         }
@@ -131,7 +131,7 @@ class PageController extends GigawikiController
 
         return redirect()
             ->route('pages.show', $update->slug)
-            ->with('success', 'page updated successfully');
+            ->with('success', 'Page updated successfully');
     }
 
     /**

@@ -29,9 +29,9 @@ class GigawikiController extends Controller
     /**
      * Show or not comments.
      *
-     * @return bool
+     * @return string
      */
-    public function displayComments(): bool
+    public function displayComments(): string
     {
         $setting = Setting::where('key', 'disable-comments')->first();
         
