@@ -11,6 +11,12 @@ use Illuminate\Support\Facades\Auth;
 
 class PDFController extends Controller
 {
+    /**
+     * Generate pdf document.
+     *
+     * @param string $slug
+     * @return void
+     */
     public function generatePdf(string $slug)
     {
         
