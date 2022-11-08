@@ -43,8 +43,9 @@ trait HasUploadFile
         $dom = new \DomDocument();
         $dom->encoding = "UTF-8";
         $dom->loadHtml($request, LIBXML_HTML_NODEFDTD); //, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD
+        
         $images = $dom->getElementsByTagName('img');
-
+        
         foreach ($images as $img) {
             $name = $this->setImageName();
             $data = $img->getAttribute('src');
@@ -58,7 +59,7 @@ trait HasUploadFile
                 list(, $data) = explode(',', $data);
                 // Decode base64
                 $dataDecode = base64_decode($data);
-                
+
                 $dir = $this->getStoragePath() . Auth::id();
                 // Storing image.
                 if ( ! is_dir(storage_path('app/public/' . $dir))) {
