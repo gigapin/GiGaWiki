@@ -9,14 +9,17 @@ use App\Models\Setting;
 use App\Models\Subject;
 use Exception;
 use Illuminate\Support\Facades\Storage;
+use Laravel\Sanctum\HasApiTokens;
 
 class LibraryController extends Controller
 {
-    public function index()
-    {
+	//use HasApiTokens;
+	
+	public function index()
+	{
 		try {
 			$setting = Setting::where('key', 'allow-public-access')->where('value', 'false')->first();
-			
+
 			if ($setting === null) {
 				throw new Exception('Forbidden');
 			} else {
@@ -28,45 +31,46 @@ class LibraryController extends Controller
 						$image[] = null;
 					}
 				}
-	
-				return response()->json([
-					'subjects' => $subjects,
-					'image' => $image,
-					'default' => asset('storage/logo-150x150.png'),
-				], 200);
+
+				// return response()->json([
+				// 	'subjects' => $subjects,
+				// 	'image' => $image,
+				// 	'default' => [asset('storage/logo-150x150.png')],
+				// ], 200);
+				return response()->json($subjects, 200);
 			}
-			
 		} catch (Exception $exc) {
 			echo $exc->getMessage();
 		}
-    }
+	}
 
-    public function projectsBelongsToSubject($id)
-    {
+	public function projectsBelongsToSubject($id)
+	{
 		try {
 			$setting = Setting::where('key', 'allow-public-access')->where('value', 'false')->first();
-			
+		
 			if ($setting === null) {
 				throw new Exception('Forbidden');
 			} else {
 				$projects = Project::where('subject_id', $id)->where('visibility', 1)->get();
+				//dd($projects);
+				// foreach ($projects as $project) {
+				// 	if ($project->image_id !== null) {
+				// 		$image[] = $project->image->url;
+				// 	} else {
+				// 		$image[] = null;
+				// 	}
+				// }
 
-				foreach ($projects as $project) {
-					if ($project->image_id !== null) {
-						$image[] = $project->image->url;
-					} else {
-						$image[] = null;
-					}
-				}
-
-				return response()->json([
-					'projects' => $projects,
-					'image' => $image,
-					'default' => Storage::url('pattern_vue.png'),
-				], 200);
+				// return response()->json([
+				// 	'projects' => $projects,
+				// 	'image' => $image,
+				// 	'default' => Storage::url('pattern_vue.png'),
+				// ], 200);
+				return response()->json($projects, 200);
 			}
 		} catch (Exception $exc) {
 			echo $exc->getMessage();
 		}
-    }
+	}
 }

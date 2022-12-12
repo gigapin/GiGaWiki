@@ -14,20 +14,22 @@ class DocumentController extends Controller
         $project = Project::where('slug', $slug)->first();
         $sections = Section::where('project_id', $project->id)->get();
         $pages = Page::where('project_id', $project->id)->get();
-
+        
+        
         return response()->json([
             'project' => $project,
             'sections' => $sections,
             'pages' => $pages,
         ], 200);
+        
     }
 
     public function page(string $project, string $slug)
     {
-        $post = Page::where('slug', $slug)->first();
+        $page = Page::where('slug', $slug)->first();
 
         return response()->json([
-            'post' => $post,
+            'page' => $page,
         ], 200);
     }
 }

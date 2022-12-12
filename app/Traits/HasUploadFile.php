@@ -99,11 +99,12 @@ trait HasUploadFile
     {
         $file = request()->file($fileName);
         $name = $file->hashName();
-        $dir = $this->getStoragePath() . Auth::id();
-        if (! is_dir($dir)) {
-            Storage::makeDirectory($dir);
-        } 
-        $file->storeAs($this->getStoragePath() . Auth::id(), $name, 'public');
+        //$dir = $this->getStoragePath() . Auth::id();
+        
+        // if (! is_dir($dir)) {
+        //     Storage::makeDirectory($dir);
+        // } 
+        $file->storeAs($this->getStoragePath() . Auth::id(), $name);
         
         return $name;
     }
@@ -118,7 +119,7 @@ trait HasUploadFile
     {
         return Image::create([
             'name' => $this->renderFeatured($image_name),
-            'url' => env('APP_URL') . '/storage/uploads/' . Auth::id() . '/' . $this->renderFeatured($image_name),
+            'url' => "https://gigawiki.s3.eu-west-1.amazonaws.com/" . $this->getStoragePath()  . Auth::id() . '/' . $this->renderFeatured($image_name), //env('APP_URL') . '/storage/uploads/'
             'path' => 'uploads/' . Auth::id() . '/' . $this->renderFeatured($image_name),
             'type' => $type,
             'created_by' => Auth::id(),
@@ -136,10 +137,12 @@ trait HasUploadFile
         if($image_id !== null) {
             $image = Image::find($image_id);
             if($image !== null) {
-                if(file_exists(storage_path('app/public/' . $image->path))) { 
-                    $image->delete();
-                    Storage::disk('public')->delete($image->path);
-                }
+                Storage::disk()->delete($image->path);
+                $image->delete(); 
+                // if(file_exists(storage_path('app/public/' . $image->path))) { 
+                //    $image->delete(); 
+                //     Storage::disk()->delete($image->url);
+                // }
             }
         }
 
@@ -155,24 +158,26 @@ trait HasUploadFile
      */
     public function getImageFeatured(int $id, string $model): string
     {
-        if (env('DEFAULT_iMAGE') !== null) {
-            $default_image = env('DEFAULT_IMAGE');
-        } else {
-            $default_image = "";
-        }
+        // if (config('default.image') !== null) {
+        //     $default_image = config('default.image');
+        // } else {
+        //     $default_image = "";
+        // }
        
         $class = "App\Models\\$model";
         $image_id = $class::find($id);
 
         if ($image_id->image_id !== null) {
             $image = Image::find($image_id->image_id);
-            if ($image !== null) {
-                if (file_exists(storage_path('app/public/' . $image->path))) {
-                    $default_image = $image->url;
-                } else {
-                    $image->delete();
-                }
-            }
+            $default_image = $image->url;
+            // if ($image !== null) {
+            //     if (file_exists(storage_path($image->url))) {
+            //         $default_image = $image->url;
+            //     } 
+            //     // else {
+            //     //     $image->delete();
+            //     // }
+            // }
         }
         
         return $default_image;
@@ -189,10 +194,12 @@ trait HasUploadFile
     {
         $image = Image::find($id);
         if ($image !== null) {
-            if (file_exists(storage_path('app/public/' . $image->path))) {
-                $image->delete();
-                Storage::disk('public')->delete($image->path);
-            }
+            Storage::disk()->delete($image->path);
+            $image->delete();
+            // if (file_exists(storage_path('app/public/' . $image->path))) {
+            //     $image->delete();
+            //     Storage::disk()->delete($image->url);
+            // }
         }
     }
 

@@ -14,7 +14,6 @@ Route::get('/document/{project}', [DocumentController::class, 'project']);
 //Route::get('/document/{project}/{section}', [DocumentController::class, 'section']);
 Route::get('/document/{project}/{slug}', [DocumentController::class, 'page']);
 
-
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
