@@ -12,7 +12,7 @@ After you installed GiGaWiki, you can access at the admin dashboard entering in 
 You needed, for security reason, change these values immediatly after the first login.
 
 ## Learning GiGaWiki
-
+After GigaWiki has been installed you need prompt some commands from your terminal.
  
 
 ## License
