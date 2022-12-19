@@ -178,6 +178,8 @@ trait HasUploadFile
             //     //     $image->delete();
             //     // }
             // }
+        } else {
+            $default_image = '';
         }
         
         return $default_image;
