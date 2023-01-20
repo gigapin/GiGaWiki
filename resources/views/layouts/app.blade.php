@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="{{ asset('summernote/summernote/summernote-lite.min.css') }}">
 
     <!-- Styles -->
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
     <link rel="stylesheet" href="{{ asset('css/editor.css') }}">
 
