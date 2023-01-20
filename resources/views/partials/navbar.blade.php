@@ -18,7 +18,6 @@
 
             <div class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
                 <div class="flex-shrink-0 flex items-center text-white text-2xl">
-                    {{-- <img class="block lg:hidden h-8 w-auto" src="{{ asset('images/logo-150x150.png') }}" alt="Workflow"> --}}
                     
                     <div class="hidden xl:block md:max-h-10 md:max-w-md">
                         <a href="{{ route('dashboard') }}" target="_blank">
@@ -34,7 +33,7 @@
                 </div>
                 <div class="hidden sm:block sm:ml-6">
                     <div class="flex space-x-4">
-                        <a href="{{ route('dashboard') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-md font-medium hover:no-underline">Home</a>
+                        <a href="{{ config('app.url') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-md font-medium hover:no-underline">Home</a>
                         <a href="{{ route('dashboard') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-md font-medium hover:no-underline">Dashboard</a>  
                         <a href="{{ route('subjects.index') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-md font-medium hover:no-underline">Subjects</a>         
                         <a href="{{ route('projects.index') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-md font-medium hover:no-underline">Projects</a>

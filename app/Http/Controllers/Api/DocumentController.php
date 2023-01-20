@@ -50,4 +50,5 @@ class DocumentController extends Controller
             'next' => $next
         ], 200);
     }
+
 }

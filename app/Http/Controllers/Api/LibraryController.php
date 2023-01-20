@@ -23,6 +23,15 @@ class LibraryController extends Controller
 				throw new Exception('Forbidden');
 			} else {
 				$subjects = Subject::where('visibility', 1)->get();
+				//dd($subjects[0]);
+				// if (count($subjects) === 1) {
+				// 	//$subject = Subject::where('visibility', 1)->first();
+				// 	$projects = Project::where('subject_id', $subjects[0]->id)->where('visibility', 1)->get();
+				// 	if (count($projects) === 1) {
+				// 		return redirect()->route('document', $projects[0]->slug);
+				// 	}
+					
+				// }
 				
 				// foreach ($subjects as $subject) {
 				// 	if ($subject->image_id !== null) {

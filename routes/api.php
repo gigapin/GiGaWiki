@@ -10,7 +10,7 @@ use App\Http\Controllers\Api\HomeController;
 Route::get('/', [HomeController::class, 'index']);
 Route::get('/library', [LibraryController::class, 'index']);
 Route::get('/library/{id}', [LibraryController::class, 'projectsBelongsToSubject']);
-Route::get('/document/{project}', [DocumentController::class, 'project']);
+Route::get('/document/{project}', [DocumentController::class, 'project'])->name('document');
 //Route::get('/document/{project}/{section}', [DocumentController::class, 'section']);
 Route::get('/document/{project}/{slug}', [DocumentController::class, 'page']);
 
