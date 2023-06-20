@@ -24,9 +24,9 @@ class Toolbar extends Component
     public string|null $link;
 
     /**
-     * @var int|null
+     * @var int|string|null
      */
-    public int|null $id;
+    public int|string|null $id;
 
     /**
      * @var bool|mixed
@@ -38,7 +38,7 @@ class Toolbar extends Component
      * @param string|null $page
      * @param string|null $link
      */
-    public function __construct(string $page = null, string $link = null, int $id = null, $icon = true)
+    public function __construct(string $page = null, string $link = null, int|string $id = null, $icon = true)
     {
         $this->page = $page;
         $this->link = $link;

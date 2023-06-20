@@ -1,0 +1,90 @@
+GigaWiki is a self-hosted web application, and was conceived to create and manage documents, guides, wikis or manuals. 
+Thanks to its hierarchical structure, it allows you to organize the documentation generated in a clear and precise way. 
+It can be used by an individual or a team, with the ability to assign different roles to different team members. 
+Images, tables, lists can be inserted into the documents created, thanks to a text editor, called WYSIWYG, which allows you to view what is inserted directly in the application. 
+The application saves all the changes made to the documents in order to restore previous versions.
+
+
+The application must be downloaded from the site https://gigawiki.net , and can be installed locally or on an external server. 
+In both cases you need to install some dependencies for the application to work correctly. 
+If the application must run locally, a web server, Apache or Nginx or a tool like XAMP must be installed and configured, you must also install php, the minimum required version is 8, composer, mysql version 5 or 8 and obviously have a browser installed on your operating system. 
+If you have chosen to download the zipped version, you must unpack it in the default directory of the installed web server, and then start a terminal session in the same directory. 
+Alternatively, if you have git installed on your operating system, you need to start a terminal session directly within the default directory of the web server, and clone the application. 
+After creating a database you need to enter the data in the configuration file and then type the following commands:
+- Php artisan install
+- Php artisan key:generate
+- Php artisan migrate
+- Php artisan storage: link
+Add admin to the application address to access the login page, enter the credentials admin@admin.com and the password "password". 
+Immediately after the first access, change the credentials on the "profile" page.
+
+
+There are two operational roles, the admin and the editor. 
+The former is responsible for managing the application, can create other users, modify settings, create subjects, 
+create projects and modify or delete documents created by editors, while the editor has the option to create, 
+modify and delete projects, sections and pages of its creation. 
+The guest role can also be assigned to users who are offered the possibility of viewing the content without being able to intervene directly, 
+a useful option when you do not intend to create a public interface but limit access only to registered users.
+
+
+
+GiGaWiki's structure provides that each project created must necessarily be inserted within a subject, 
+which we could define as the area or workspace, in such a way as to contain one or more projects that have a correlation of topics covered between them . 
+As already specified, only administrators can create subjects.
+Projects represent the backbone of the document to be created. 
+If we wanted to give a practical example, we could define each single project as a book, or a manual, while the sections would represent the chapters, and the page the content of a chapter.
+When we create a section we can insert a description, an image and tags, useful for the taxonomy of documents. 
+Similar procedure for creating a project, with the only difference that in order to correctly save the project, 
+you need to select a subject belonging to the project itself, directly from the drop-down menu located under the field for entering the project name.
+
+
+
+Create documents and sections within a project
+The documents, or pages as they are defined by GiGaWiki, are the core of the application, they represent the content to be shown to the user. 
+To divide in a more organic way and make the consultation of the documentation clearer and more usable, it is necessary to group the pages into sections, as if they were the chapters of a book. 
+If you don't need to do it, you still need to create at least one section where you can group all the pages.
+For each section it is possible to write an optional description.
+For the creation of subjects, projects and sections, the form has a similar structure while for writing the pages the form is also visually structured in different ways, 
+being larger in size, with the possibility of inserting images within the field menu text. 
+Once saved, the page is presented in a consultation format in such a way as to be able to view what has been written, with the possibility of modifying or eliminating the content. 
+You can select the single page among your favourites, so that you can access it more quickly later. There is the possibility to download the content in PDF format.
+Insert images
+The images can be in png or jpeg format and it is strongly recommended to reduce the size so as not to overload the server too much.
+It is possible to reduce the size of the image within the document, but only in proportion to it, not on the actual weight in bytes of the image itself, 
+an operation that must be performed previously with special software.
+Enter comments
+You can insert comments if the project is accessible to several people or use this function as a side note if there is only one user assigned to create content.
+
+
+Document review management
+Every time a page is modified, the system will save the previous version, in order to guarantee its recovery. 
+By clicking on the appropriate link, you will have the opportunity to see a preview of the previously saved version, 
+the date on which the version was written, the possibility of permanently deleting it and restoring it, in order to replace the currently published version .
+Export to PDF
+Every single page can be exported and saved in PDF format on your device. The system will automatically try to format the document for printing.
+Favorites and tags management
+A very useful feature is the ability to mark a single page as a favorite. 
+By clicking on the favorites menu item, from the user profile panel, you will have the list available with all the links to the pages marked favorite and be able to access them immediately.
+Tags are useful for marking different pages, projects or sections with a label that can bring these elements back to a single topic, 
+useful for facilitating the cataloging of contents. There is also a specific menu item for this function.
+
+
+
+User profile management
+Each user, except guest user, has the ability to change his login credentials, the avatar and get an overview of the created content.
+Settings
+In the settings, which can only be modified by the admin user, it is possible to enable the display of content created in an external structure via API, 
+enable the creation of comments within the application and request the confirmation email from the user invited to participate the creation of content by an admin.
+In the maintenance section you can empty the trash of all saved resources or delete all images in the appropriate folder.
+In the users section you can proceed with the creation of a new user, to which you can assign a name, an email, a role and a password. 
+If you want to invite an external person to your team, 
+there is the possibility of sending an email to the user by ticking the flag in the appropriate checkbox marked with the item "send user invite email".
+Enter settings in the configuration file
+In the .env file you can enter some parameters useful for configuring the application.
+ Very important are the data relating to the database, the number of articles to be shown for each page, 
+ the data of the email service and possibly the data relating to a storage service.
+
+
+
+
+ 

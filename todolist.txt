@@ -1,0 +1,24 @@
+title 
+description 
+status [to do, progress, done]
+project_id
+deadline
+notificable [email, none]
+timestamps
+
+
+- Nella pagina del progetto inserire il link alla todo list.
+- Nella index della todolist vengono mostrati i todos nelle tre categorie: da fare, 
+  in esecuzione e completata.
+- Per creare un todo click sul bottone "add todo".
+- Inserire il titolo, eventuale descrizione, scadenza e cliccare sul radio button per lo status 
+  e sul checkbox per abilitare la notifica.
+- La index deve essere incorporata in un form per modificare lo status.
+- Ogni card del todolist deve avere due icone, una per l'eliminazione e l'altra per la modifica 
+  dei campi.
+- I todos inseriti nello status completato dovranno avere due icone, una per muovere il todo 
+  nell'archivio ed un'altra per eliminare definitivamente il todo stesso.
+- Nella pagina deve essere presentew un bottone per accedere ai todos archiviati.
+- Ogni todo archiviato deve avere due icone, una per riabilitare il todo nello status "da fare"
+  ed un'altra per eliminare definitivamente il todo.
+

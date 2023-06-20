@@ -16,6 +16,7 @@ use App\Http\Controllers\Dashboard\ImageController;
 use App\Http\Controllers\Dashboard\SettingController;
 use App\Http\Controllers\Dashboard\UserController;
 use App\Http\Controllers\Auth\UserInvitedRegisterController;
+use App\Http\Controllers\Dashboard\ToDoListController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LibraryController;
 use App\Http\Controllers\DocumentController;
@@ -123,8 +124,14 @@ Route::middleware(['auth'])->group(function() {
         Route::patch('users/{slug}', [UserController::class, 'update'])->name('users.update');
         Route::get('users/delete/{id}', [UserController::class, 'delete'])->name('users.delete');
         
-
         Route::get('send', [AccountMailController::class, 'sendMail']);
+
+        Route::get('projects/{project}/todolists', [ToDoListController::class, 'index'])->name('todolists.index');
+        Route::get('projects/{project}/todolists/create', [ToDoListController::class, 'create'])->name('todolists.create');
+        /*Route::post('projects/{project}/todolists', [ToDoListController::class, 'store'])->name('todolists.store');
+        Route::get('projects/{project}/todolists/{slug}/edit', [ToDoListController::class, 'edit'])->name('todolists.edit');
+        Route::put('projects/{project}/todolists/{slug}', [ToDoListController::class, 'update'])->name('todolists.update');
+        Route::delete('projects/{project}/todolists/{slug}', [ToDoListController::class, 'destroy'])->name('todolists.destroy');*/
     });
 
 });

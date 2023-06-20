@@ -45,10 +45,10 @@ class ProjectController extends GigawikiController
     /**
      * Show the form for creating a new resource.
      *
-     * @return void
+     * @return View
      * @throws \Exception
      */
-    public function create()
+    public function create(): View
     {
         $this->authorize('create', Project::class);
 
@@ -72,9 +72,9 @@ class ProjectController extends GigawikiController
             $this->renderFeatured('featured');
             $data['image_id'] = $this->saveImageFeatured('featured')->id;
         }
-        
+
         $project = Project::create($data);
-        
+
         if(request()->tags !== null) {
             foreach(request()->tags as $tag) {
                 if ($tag !== null) {
@@ -152,13 +152,13 @@ class ProjectController extends GigawikiController
     public function update(ProjectRequest $request, TagAction $tagAction, string $slug)
     {
         $data = $this->getDataForm($request);
-        
+
         if ($request->hasFile('featured') && $request->file('featured')->isValid()) {
             $this->renderFeatured('featured');
             $data['image_id'] = $this->updateImageFeatured('featured', $request->image_id)->id;
         }
-        
-        $project = $this->project($slug); 
+
+        $project = $this->project($slug);
         $project->update($data);
 
         if(request()->tags !== null) {
